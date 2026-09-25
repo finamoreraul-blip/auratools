@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel Admin - Tracking Aura</title>
+<style>body{font-family:Arial;max-width:950px;margin:auto;padding:12px;background:#111;color:#fff}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:9px;border-bottom:1px solid #333;text-align:center}th{background:#2a2a2a;color:#a78bfa}.card{background:#1e1e1e;padding:14px;border-radius:12px;margin:10px 0}.badge{padding:4px 8px;border-radius:20px;font-size:11px;font-weight:800}.ok{background:#dcfce7;color:#166534}.warn{background:#fef9c3;color:#854d0e}.exp{background:#fee2e2;color:#991b1b}.pro{background:#dbeafe;color:#1e40af}button{padding:7px 10px;border:0;border-radius:8px;font-weight:700;cursor:pointer}.ren{background:#22c55e;color:#fff}.del{background:#ef4444;color:#fff}</style>
+</head><body>
+<h2>📊 Panel Tracking Aura</h2>
+<div id="alertBox" style="display:none;background:#22c55e;color:#fff;padding:12px;border-radius:10px;margin:10px 0;font-weight:800">🔔 ¡Nueva intención de pago!</div>
+<div class="card"><div style="display:flex;gap:8px;text-align:center">
+<div style="flex:1;background:#222;padding:10px;border-radius:10px"><small>EN PRUEBA</small><br><b id="k_trial" style="font-size:20px;color:#facc15">0</b></div>
+<div style="flex:1;background:#222;padding:10px;border-radius:10px"><small>QUIERE PAGAR</small><br><b id="k_click" style="font-size:20px;color:#60a5fa">0</b></div>
+<div style="flex:1;background:#222;padding:10px;border-radius:10px"><small>SUSCRIPTOS</small><br><b id="k_pro" style="font-size:20px;color:#4ade80">0</b></div>
+<div style="flex:1;background:#222;padding:10px;border-radius:10px"><small>VENCIDOS</small><br><b id="k_exp" style="font-size:20px;color:#f87171">0</b></div>
+</div></div>
+<div class="card">
+<h3>👥 Usuarias - Día registro / Días restantes / Renovación</h3>
+<button onclick="load()" style="background:#7c3aed;color:#fff;padding:10px;width:100%">🔄 Actualizar ahora</button>
+<table><tr><th>Email / Tel</th><th>Registro</th><th>Estado</th><th>Restan</th><th>Últ. activ</th><th>Herramientas</th><th>Acción</th></tr><tbody id="tb"></tbody></table>
+</div>
+<div class="card"><h3>💬 Chat</h3><div id="chatBox" style="height:200px;overflow:auto;background:#000;padding:10px;border-radius:8px"></div><div style="display:flex;gap:6px;margin-top:8px"><input id="chatIn" placeholder="Responder..." style="flex:1;padding:10px;border-radius:8px;border:0"><button onclick="sendAdmin()" style="background:#7c3aed;color:#fff;padding:10px">Enviar</button></div></div>
+<audio id="ding" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
+<script>
+let lastClickCount=0;
+function getU(){return JSON.parse(localStorage.getItem('aura_users')||'[]')}
+function saveU(u){localStorage.setItem('aura_users',JSON.stringify(u))}
+function load(){
+ let us=getU(), now=Date.now(), t=0,c=0,p=0,e=0, html='';
+ us.forEach(function(u,i){
+  let dias=Math.floor((now-u.inicio)/86400000);
+  let isTrial=u.trial!==false;
+  let total=isTrial?3:30, rest=total-dias;
+  let estado, cls;
+  if(u.pro){estado='SUSCRIPTO PRO';cls='pro';p++;}
+  else if(rest<0){estado='VENCIDO';cls='exp';e++;}
+  else if(u.tools&&u.tools['click_suscribirse']){estado='QUIERE PAGAR';cls='ok';c++;}
+  else if(isTrial){estado='EN PRUEBA 3d';cls='warn';t++;}
+  else{estado='ESPERANDO PAGO';cls='warn';t++;}
+  let last=u.lastActive?new Date(u.lastActive).toLocaleString('es-AR'):'-';
+  let tools='-';
+  if(u.tools){let arr=Object.entries(u.tools).sort(function(a,b){return b[1]-a[1]}).slice(0,3);tools=arr.map(function(x){return x[0].substring(0,14)+' ('+x[1]+')'}).join('<br>');}
+  let fecha=new Date(u.inicio).toLocaleDateString('es-AR');
+  html+='<tr><td><b>'+u.email+'</b><br><small>'+(u.tel||'')+'</small></td><td>'+fecha+'</td><td><span class="badge '+cls+'">'+estado+'</span></td><td>'+rest+'d</td><td><small>'+last+'</small></td><td><small>'+tools+'</small></td><td><button class="ren" onclick="renovar('+i+')">Renovar 30d</button><br><button class="del" style="margin-top:4px" onclick="eliminar('+i+')">x</button></td></tr>';
+ });
+ document.getElementById('tb').innerHTML=html||'<tr><td colspan=7>Sin usuarias</td></tr>';
+ document.getElementById('k_trial').textContent=t;
+ document.getElementById('k_click').textContent=c;
+ document.getElementById('k_pro').textContent=p;
+ document.getElementById('k_exp').textContent=e;
+ if(c>lastClickCount && lastClickCount!==0){
+  document.getElementById('alertBox').style.display='block';
+  document.getElementById('ding').play();
+  setTimeout(function(){document.getElementById('alertBox').style.display='none'},5000);
+ }
+ lastClickCount=c;
+ loadChat();
+}
+function renovar(i){let u=getU();u[i].trial=false;u[i].pro=true;u[i].inicio=Date.now();saveU(u);load();alert('✅ '+u[i].email+' ahora es PRO 30 días');}
+function eliminar(i){if(!confirm('Eliminar?'))return;let u=getU();u.splice(i,1);saveU(u);load();}
+function loadChat(){let ch=JSON.parse(localStorage.getItem('chats')||'[]');document.getElementById('chatBox').innerHTML=ch.map(function(m){return '<p><b>'+m.de+':</b> '+m.txt+'</p>'}).join('');}
+function sendAdmin(){let ch=JSON.parse(localStorage.getItem('chats')||'[]');let v=document.getElementById('chatIn').value;if(!v)return;ch.push({de:'admin',txt:v});localStorage.setItem('chats',JSON.stringify(ch));document.getElementById('chatIn').value='';loadChat();}
+load();setInterval(load,4000);
+</script></body></html>
