@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aura Tools Pro - 9 en 1</title>
+<style>
+*{box-sizing:border-box}body{font-family:'Segoe UI',Arial;max-width:640px;margin:0 auto;padding:0 12px 40px;background:#faf5ff;color:#222}
+header{position:sticky;top:0;background:#7c3aed;color:#fff;padding:15px;border-radius:0 0 18px 18px;text-align:center;z-index:10}
+nav{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;position:sticky;top:70px;background:#faf5ff;padding:8px 0;z-index:9}
+nav button{flex:1 1 30%;padding:10px;font-size:12px;font-weight:700;background:#fff;border:2px solid #e9d5ff;border-radius:12px;cursor:pointer}
+nav button.active{background:#7c3aed;color:#fff;border-color:#7c3aed}
+.card{background:#fff;padding:18px;border-radius:18px;margin:12px 0;box-shadow:0 4px 18px rgba(124,58,237,.08)}
+.hidden{display:none}input,select,textarea{width:100%;padding:11px;margin:6px 0;border:1.5px solid #e5e7eb;border-radius:11px;font-size:14px}
+label{font-size:11px;font-weight:800;color:#7c3aed;text-transform:uppercase}
+button.primary{background:#7c3aed;color:#fff;border:0;padding:13px;border-radius:12px;width:100%;font-weight:800;margin:8px 0;cursor:pointer}
+button.sec{background:#ec4899;color:#fff;border:0;padding:10px;border-radius:10px;margin:4px 0;cursor:pointer}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+th,td{padding:9px;border-bottom:1px solid #f3f4f6;text-align:center}th{background:#f5f3ff}
+.kpi{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.kpi div{background:#f5f3ff;padding:12px;border-radius:12px;text-align:center}
+canvas{width:100%;border-radius:14px;background:#eee;margin:8px 0}
+.chatbox{height:260px;overflow-y:auto;border:1.5px solid #e9d5ff;border-radius:12px;padding:10px;background:#fdfaff}
+.msg{margin:6px 0;padding:8px 12px;border-radius:12px;max-width:85%}.cli{background:#e9d5ff;align-self:flex-start}.adm{background:#7c3aed;color:#fff;align-self:flex-end;margin-left:auto}
+</style>
+</head>
+<body>
+<header><h2 style="margin:0">✨ AURA TOOLS PRO</h2><small>9 herramientas conectadas</small></header>
+
+<div id="welcomeBanner" style="display:none;position:fixed;bottom:15px;left:15px;right:15px;background:linear-gradient(135deg,#7c3aed,#ec4899);color:#fff;padding:20px;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.3);z-index:999;text-align:center">
+<div style="font-size:22px">🎉</div><b style="font-size:17px">¡Bienvenid@ a Aura Tools!</b><br>
+<div style="margin:8px 0;font-size:14px;line-height:1.5">Tenés <b>3 días GRATIS</b> para probar las 9 herramientas.<br>Después podés seguir por solo <b>$4.999/mes</b> y mantener tu negocio organizado.<br>¡A aprovecharlo! 💖</div>
+<button onclick="document.getElementById('welcomeBanner').style.display='none'" style="background:#fff;color:#7c3aed;border:0;padding:12px 18px;border-radius:12px;font-weight:800;margin-top:8px;width:100%;cursor:pointer">Entendido, empezar →</button>
+</div>
+
+<div id="payBanner" style="display:none;position:fixed;bottom:15px;left:15px;right:15px;background:#111;color:#fff;padding:20px;border-radius:16px;z-index:999;text-align:center;border:2px solid #7c3aed">
+<b style="font-size:16px">⏰ Tus 3 días gratis terminaron</b><br>
+<div style="margin:8px 0;font-size:14px">Seguí con Aura Pro por <b style="color:#4ade80">$4.999/mes</b> y no pierdas tus herramientas 💖</div>
+<a href="https://mpago.li/2JRVJYn" onclick="track('click_suscribirse')" target="_blank" style="display:block;background:linear-gradient(135deg,#7c3aed,#ec4899);color:#fff;text-decoration:none;padding:14px;border-radius:12px;font-weight:900;margin-top:10px">🚀 ¡ME QUIERO SUSCRIBIR AHORA!</a>
+<button onclick="document.getElementById('payBanner').style.display='none'" style="background:transparent;color:#aaa;border:0;margin-top:10px;font-size:13px">Ahora no</button>
+</div>
+
+<div id="login" class="card" style="text-align:center;margin-top:20px">
+<h3>Ingresar</h3><p style="font-size:13px;color:#666">Acceso para clientas con suscripción</p>
+<label>Email</label><input id="lg_email" placeholder="tu@gmail.com">
+<label>WhatsApp</label><input id="lg_tel" placeholder="5492983000000">
+<button class="primary" onclick="doLogin()">Entrar a mis herramientas →</button>
+</div>
+
+<div id="app" class="hidden">
+<a href="https://mpago.li/2JRVJYn" onclick="track('click_suscribirse')" target="_blank" style="display:block;background:#22c55e;color:#fff;text-align:center;text-decoration:none;padding:12px;border-radius:12px;font-weight:800;margin:10px 0">💎 ¡ME QUIERO SUSCRIBIR AHORA! - $4.999/mes</a>
+<nav id="menu">
+<button onclick="tab('t1',this);track('Comparador')" class="active">1💲<br>Comparador</button>
+<button onclick="tab('t2',this);track('Finanzas')">2📊<br>Finanzas</button>
+<button onclick="tab('t3',this);track('Descrip IA')">3🤖<br>Descrip IA</button>
+<button onclick="tab('t4',this);track('Consejos')">4💬<br>Consejos</button>
+<button onclick="tab('t5',this);track('Stock')">5📦<br>Stock</button>
+<button onclick="tab('t6',this);track('Foto Pro')">6📸<br>Foto Pro</button>
+<button onclick="tab('t7',this);track('Banner')">7🎨<br>Banner</button>
+<button onclick="tab('t8',this);track('Post Redes')">8📱<br>Post Redes</button>
+</nav>
+<div id="t1" class="card tab"><h3>1. Comparador Mayorista / Minorista / Final</h3><label>Producto</label><input id="c_nom" placeholder="Ej: Labial matte"><div style="display:flex;gap:8px"><div style="flex:1"><label>Mayorista $</label><input id="c_may" type="number" oninput="calcC()"></div><div style="flex:1"><label>Minorista ref $</label><input id="c_min" type="number" oninput="calcC()"></div><div style="flex:1"><label>Tu precio final $</label><input id="c_fin" type="number" oninput="calcC()"></div></div><div id="c_res" class="kpi"></div><button class="sec" onclick="saveComp();track('Comparador_uso')">💾 Guardar y enviar a Finanzas</button><div id="c_hist"></div></div>
+<div id="t2" class="card tab hidden"><h3>2. Planilla Financiera Completa</h3><label>Fecha</label><input type="date" id="f_fecha"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label>Ingresos</label><input id="f_ing" type="number"></div><div><label>Egresos</label><input id="f_egr" type="number"></div><div><label>Inversión</label><input id="f_inv" type="number"></div><div><label>Impuestos</label><input id="f_imp" type="number"></div></div><label>Nota</label><input id="f_nota" placeholder="Ej: venta feria"><button class="primary" onclick="addFin();track('Finanzas_uso')">+ Agregar movimiento</button><div class="kpi"><div><small>INGRESOS</small><br><b id="k_ing">$0</b></div><div><small>EGRESOS+INV</small><br><b id="k_egr">$0</b></div><div><small>GANANCIA</small><br><b id="k_net">$0</b></div></div><div id="f_ia" style="background:#111;color:#4ade80;padding:12px;border-radius:12px;white-space:pre-line;font-size:13px"></div><table id="f_tab"></table></div>
+<div id="t3" class="card tab hidden"><h3>3. Generador de Descripciones IA - 3 tonos</h3><label>Nombre del producto</label><input id="d_prod" placeholder="Ej: Base líquida Aura"><label>Beneficio principal</label><input id="d_ben" placeholder="Ej: larga duración 24h"><button class="primary" onclick="genDesc();track('Descrip_uso')">🤖 Generar las 3 versiones</button><div class="card" style="background:#fefce8"><b>🔥 Canchero</b><textarea id="d1" rows="4"></textarea><button class="sec" onclick="copyT('d1')">Copiar</button></div><div class="card" style="background:#eff6ff"><b>💼 Profesional</b><textarea id="d2" rows="4"></textarea><button class="sec" onclick="copyT('d2')">Copiar</button></div><div class="card" style="background:#fdf2f8"><b>🌸 Sutil</b><textarea id="d3" rows="4"></textarea><button class="sec" onclick="copyT('d3')">Copiar</button></div><button class="primary" onclick="toPost()">Usar esta descripción en Creador de Post →</button></div>
+<div id="t4" class="card tab hidden"><h3>4. Consejos Empresariales - Chat directo</h3><p style="font-size:13px">Hablá conmigo, te respondo desde mi panel.</p><div id="chatBox" class="chatbox" style="display:flex;flex-direction:column"></div><div style="display:flex;gap:6px;margin-top:8px"><input id="chatIn" placeholder="Ej: ¿Cómo pongo precios?"><button class="primary" style="width:90px" onclick="sendChat();track('Chat_uso')">Enviar</button></div></div>
+<div id="t5" class="card tab hidden"><h3>5. Planilla de Stock</h3><div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px"><input id="s_nom" placeholder="Producto"><input id="s_cant" type="number" placeholder="Cant"><input id="s_min" type="number" placeholder="Mín"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><input id="s_costo" type="number" placeholder="Costo $"><input id="s_venta" type="number" placeholder="Venta $"><button class="sec" onclick="addStock();track('Stock_uso')">Agregar</button></div><div class="kpi"><div><small>UNIDADES</small><br><b id="sk_u">0</b></div><div><small>VALOR COSTO</small><br><b id="sk_c">$0</b></div><div><small>GANANCIA POT.</small><br><b id="sk_g">$0</b></div></div><table id="s_tab"></table></div>
+<div id="t6" class="card tab hidden"><h3>6. Editor de Fotos Pro - Manual</h3><input type="file" id="fotoIn" accept="image/*"><label>Brillo</label><input type="range" id="r_bri" min="50" max="150" value="100" oninput="ef();track('Foto_uso')"><label>Contraste</label><input type="range" id="r_con" min="50" max="150" value="100" oninput="ef()"><label>Saturación</label><input type="range" id="r_sat" min="0" max="200" value="100" oninput="ef()"><label>Calidez</label><input type="range" id="r_warm" min="0" max="50" value="0" oninput="ef()"><canvas id="cvF"></canvas><div style="display:flex;gap:6px"><button class="sec" onclick="filtro('bw')">B&W</button><button class="sec" onclick="filtro('vivid')">Vivid</button><button class="sec" onclick="resetF()">Reset</button></div><button class="primary" onclick="dlF()">⬇️ Descargar foto HD</button></div>
+<div id="t7" class="card tab hidden"><h3>7. Creador de Banner Pro</h3><input id="b_tit" placeholder="Título grande" oninput="db()"><input id="b_sub" placeholder="Subtítulo" oninput="db()"><div style="display:flex;gap:6px"><input type="color" id="b_c1" value="#7c3aed" oninput="db()"><input type="color" id="b_c2" value="#ec4899" oninput="db()"><input type="color" id="b_ct" value="#ffffff" oninput="db()"></div><div style="display:flex;gap:6px;margin:6px 0"><select id="b_font" onchange="db();track('Banner_uso')"><option value="Arial">Arial</option><option value="Georgia">Elegante</option><option value="Impact">Impacto</option><option value="Verdana">Moderna</option></select><select id="b_stk" onchange="addStk(this.value)"><option value="">+ Sticker</option><option>🔥</option><option>✨</option><option>💅</option><option>💖</option><option>🎁</option><option>⭐</option></select></div><label>Fondo personalizado</label><input type="file" id="b_bg" accept="image/*"><canvas id="cvB" width="1080" height="600"></canvas><button class="primary" onclick="dlB()">⬇️ Descargar Banner</button></div>
+<div id="t8" class="card tab hidden"><h3>8. Creador de Post para Redes</h3><label>Foto</label><input type="file" id="p_file" accept="image/*"><label>Descripción</label><textarea id="p_desc" rows="5" oninput="pp()"></textarea><div style="display:flex;gap:6px"><input id="p_precio" placeholder="Precio $" oninput="pp()"><input id="p_wsp" placeholder="Tu WhatsApp"></div><div class="card" style="border:2px dashed #7c3aed"><b>Vista previa estilo Instagram</b><img id="p_img" style="width:100%;border-radius:12px;margin-top:8px"><p id="p_t"></p><b id="p_pr" style="color:#7c3aed;font-size:20px"></b><p id="p_cta" style="font-size:13px;color:#666"></p></div><button class="primary" onclick="copyPost();track('Post_uso')">📋 Copiar texto para pegar en Facebook / Instagram</button><button class="sec" onclick="shareWsp()">🟢 Compartir por WhatsApp</button></div>
+</div>
+<script>
+function doLogin(){if(!lg_email.value)return alert('Poné email');let now=Date.now();let user={e:lg_email.value,t:lg_tel.value,d:now,inicio:now};localStorage.setItem('aura_user',JSON.stringify(user));let users=JSON.parse(localStorage.getItem('aura_users')||'[]');if(!users.find(x=>x.email===user.e)){users.push({email:user.e,tel:user.t,inicio:now,trial:true,tools:{},lastActive:now});}localStorage.setItem('aura_users',JSON.stringify(users));alert('✅ Registro exitoso! Bienvenid@ a Aura Tools');init();document.getElementById('welcomeBanner').style.display='block';setTimeout(function(){document.getElementById('welcomeBanner').style.display='none';},12000);checkTrial();}
+function checkTrial(){let u=JSON.parse(localStorage.getItem('aura_user')||'null');if(!u)return;let dias=Math.floor((Date.now()-u.inicio)/86400000);if(dias>=3){document.getElementById('payBanner').style.display='block';}}
+function track(tool){try{let me=JSON.parse(localStorage.getItem('aura_user')||'null');if(!me)return;let users=JSON.parse(localStorage.getItem('aura_users')||'[]');let u=users.find(function(x){return x.email===me.e});if(!u)return;u.lastActive=Date.now();u.tools=u.tools||{};u.tools[tool]=(u.tools[tool]||0)+1;localStorage.setItem('aura_users',JSON.stringify(users));}catch(e){}}
+function init(){document.getElementById('login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');renderAll();}
+function tab(id,btn){document.querySelectorAll('.tab').forEach(function(e){e.classList.add('hidden')});document.getElementById(id).classList.remove('hidden');document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active')});if(btn)btn.classList.add('active');}
+let comps=JSON.parse(localStorage.getItem('comps')||'[]');
+function calcC(){let may=+c_may.value||0,ref=+c_min.value||0,fin=+c_fin.value||0;let g=fin-may,m=fin?g/fin*100:0,comp=ref?((ref-fin)/ref*100):0;c_res.innerHTML='<div><small>GANANCIA</small><br><b>$'+g+'</b></div><div><small>MARGEN</small><br><b>'+m.toFixed(1)+'%</b></div><div><small>VS COMPETENCIA</small><br><b>'+comp.toFixed(1)+'%</b></div>';}
+function saveComp(){comps.push({n:c_nom.value,may:+c_may.value,fin:+c_fin.value,g:(+c_fin.value-+c_may.value)});localStorage.setItem('comps',JSON.stringify(comps));c_hist.innerHTML=comps.map(function(c){return '<p>✅ '+c.n+': compra $'+c.may+' vende $'+c.fin+' gana $'+c.g+'</p>'}).join('');}
+let fins=JSON.parse(localStorage.getItem('fins')||'[]');f_fecha.valueAsDate=new Date();
+function addFin(){fins.push({f:f_fecha.value,i:+f_ing.value||0,e:+f_egr.value||0,inv:+f_inv.value||0,imp:+f_imp.value||0,n:f_nota.value});localStorage.setItem('fins',JSON.stringify(fins));renderFin();}
+function renderFin(){let ti=0,te=0;let h='<tr><th>Fecha</th><th>Ing</th><th>Egr</th><th>Neto</th></tr>';fins.forEach(function(x){ti+=x.i;te+=x.e+x.inv+x.imp;let net=x.i-x.e-x.inv-x.imp;h+='<tr><td>'+(x.f||'').slice(5)+'</td><td>$'+x.i+'</td><td>$'+(x.e+x.inv)+'</td><td><b>$'+net+'</b><br><small>'+(x.n||'')+'</small></td></tr>'});f_tab.innerHTML=h;k_ing.textContent='$'+ti.toLocaleString();k_egr.textContent='$'+te.toLocaleString();k_net.textContent='$'+(ti-te).toLocaleString();f_ia.innerText='🤖 AURA IA:\n'+(fins.length==0?'Cargá movimientos para activar el análisis.':(ti-te<0?'⚠️ Estás en pérdida.':'📈 Saludable. Proyección mes: $'+Math.round((ti-te)/fins.length*30).toLocaleString()));}
+function genDesc(){let p=d_prod.value||'Producto',b=d_ben.value||'calidad premium';d1.value='🔥 ¡'+p.toUpperCase()+' QUE LA ROMPE! 🔥\n'+b+' 💅 No te cuelgues, se vuelan ✨ Escribime YA 👇';d2.value=p+' | '+b+'. Fórmula profesional de alta performance.';d3.value='Descubrí '+p.toLowerCase()+', con '+b.toLowerCase()+'.';}
+function copyT(id){navigator.clipboard.writeText(document.getElementById(id).value);alert('Copiado ✅');}
+function toPost(){tab('t8',document.querySelectorAll('nav button')[7]);p_desc.value=d1.value;pp();}
+let chats=JSON.parse(localStorage.getItem('chats')||'[]');
+function sendChat(){if(!chatIn.value)return;chats.push({de:'clienta',txt:chatIn.value,ts:Date.now()});localStorage.setItem('chats',JSON.stringify(chats));chatIn.value='';renderChat();}
+function renderChat(){chatBox.innerHTML=chats.map(function(c){return '<div class="msg '+(c.de=='clienta'?'cli':'adm')+'"><b>'+c.de+':</b> '+c.txt+'</div>'}).join('');chatBox.scrollTop=9999;}
+let stock=JSON.parse(localStorage.getItem('stock')||'[]');
+function addStock(){stock.push({n:s_nom.value,c:+s_cant.value||0,min:+s_min.value||5,co:+s_costo.value||0,v:+s_venta.value||0});localStorage.setItem('stock',JSON.stringify(stock));renderStock();}
+function renderStock(){let tu=0,tc=0,tg=0;let h='<tr><th>Prod</th><th>Cant</th><th>C/V</th><th>Estado</th></tr>';stock.forEach(function(s,i){tu+=s.c;tc+=s.c*s.co;tg+=s.c*(s.v-s.co);let est=s.c<=s.min?'Bajo':'Ok';h+='<tr><td>'+s.n+'</td><td>'+s.c+'</td><td>$'+s.co+'/$'+s.v+'</td><td>'+est+' <button onclick="delS('+i+')">x</button></td></tr>'});s_tab.innerHTML=h;sk_u.textContent=tu;sk_c.textContent='$'+tc.toLocaleString();sk_g.textContent='$'+tg.toLocaleString();}
+function delS(i){stock.splice(i,1);localStorage.setItem('stock',JSON.stringify(stock));renderStock();}
+let imgF=new Image(),curF='normal';fotoIn.addEventListener('change',function(e){let r=new FileReader();r.onload=function(){imgF.onload=function(){ef()};imgF.src=r.result};r.readAsDataURL(e.target.files[0])});
+function ef(){let c=cvF;if(!imgF.src)return;c.width=800;c.height=800*imgF.height/imgF.width;let x=c.getContext('2d');let f='brightness('+r_bri.value+'%) contrast('+r_con.value+'%) saturate('+r_sat.value+'%)';if(curF=='bw')f+=' grayscale(100%)';if(curF=='vivid')f+=' saturate(180%) contrast(120%)';x.filter=f;x.drawImage(imgF,0,0,c.width,c.height);if(+r_warm.value>0){x.fillStyle='rgba(255,150,0,'+(r_warm.value/200)+')';x.fillRect(0,0,c.width,c.height);}}
+function filtro(t){curF=t;ef();}function resetF(){curF='normal';r_bri.value=100;r_con.value=100;r_sat.value=100;r_warm.value=0;ef();}
+function dlF(){let a=document.createElement('a');a.href=cvF.toDataURL('image/png');a.download='foto-pro.png';a.click();}
+let stks=[],bgB=null,drag=-1;let cvB=document.getElementById('cvB'),cxB=cvB.getContext('2d');
+b_bg.addEventListener('change',function(e){let r=new FileReader();r.onload=function(){bgB=new Image();bgB.onload=db;bgB.src=r.result};r.readAsDataURL(e.target.files[0])});
+function addStk(s){if(!s)return;stks.push({t:s,x:540,y:450});b_stk.value='';db();}
+cvB.addEventListener('pointerdown',function(e){let r=cvB.getBoundingClientRect();let mx=(e.clientX-r.left)*1080/r.width,my=(e.clientY-r.top)*600/r.height;drag=stks.findIndex(function(o){return Math.hypot(o.x-mx,o.y-my)<60});});
+cvB.addEventListener('pointermove',function(e){if(drag>=0){let r=cvB.getBoundingClientRect();stks[drag].x=(e.clientX-r.left)*1080/r.width;stks[drag].y=(e.clientY-r.top)*600/r.height;db();}});cvB.addEventListener('pointerup',function(){drag=-1});
+function db(){let W=1080,H=600;if(bgB){cxB.drawImage(bgB,0,0,W,H);cxB.fillStyle='rgba(0,0,0,.4)';cxB.fillRect(0,0,W,H);}else{let g=cxB.createLinearGradient(0,0,W,H);g.addColorStop(0,b_c1.value);g.addColorStop(1,b_c2.value);cxB.fillStyle=g;cxB.fillRect(0,0,W,H);}cxB.fillStyle=b_ct.value;cxB.textAlign='center';cxB.font='900 90px '+b_font.value;cxB.fillText(b_tit.value||'TU MARCA',W/2,260);cxB.font='40px '+b_font.value;cxB.fillText(b_sub.value||'subtítulo aquí',W/2,360);cxB.font='70px Arial';stks.forEach(function(o){cxB.fillText(o.t,o.x,o.y)});}
+function dlB(){let a=document.createElement('a');a.href=cvB.toDataURL();a.download='banner-pro.png';a.click();}
+p_file.addEventListener('change',function(e){let r=new FileReader();r.onload=function(){p_img.src=r.result};r.readAsDataURL(e.target.files[0])});
+function pp(){p_t.innerText=p_desc.value;p_pr.innerText=p_precio.value?'Precio: $'+p_precio.value:'';p_cta.innerText=p_wsp.value?'Pedidos al WhatsApp: '+p_wsp.value+' 📲':'';}
+function copyPost(){let t=p_desc.value+'\n\n💰 Precio: $'+p_precio.value+'\n📲 Pedidos: '+p_wsp.value;navigator.clipboard.writeText(t);alert('Copiado ✅');}
+function shareWsp(){let t=encodeURIComponent(p_desc.value+' Precio $'+p_precio.value);window.open('https://wa.me/'+p_wsp.value+'?text='+t);}
+function renderAll(){renderFin();renderChat();renderStock();db();calcC();pp();}
+if(localStorage.getItem('aura_user')){init();}
+setInterval(function(){let c=JSON.parse(localStorage.getItem('chats')||'[]');if(c.length!=chats.length){chats=c;renderChat();}},2000);
+setInterval(checkTrial,10000);
+</script>
+</body>
+</html>
