@@ -267,21 +267,81 @@ function addY(){let v=ytL.value;if(!v)return;ytLlist.innerHTML+=`<div class=card
 </div>
 <div id="fl"><h3>Entrar</h3><input id="lE" placeholder="Email"><input id="lP" type="password" placeholder="Contraseña"><button class="btn btn-acc" style="width:100%" onclick="login()">Entrar</button></div>
 <div id="fr" style="display:none"><h3>Crear cuenta</h3><input id="rN" placeholder="Nombre"><input id="rE" placeholder="Email"><input id="rP" type="password" placeholder="Contraseña"><button class="btn btn-acc" style="width:100%" onclick="reg()">Registrarme</button></div>
-<p id="aMsg" style="color:red"></p>
+<p id="aMsg" style="color:red;min-height:20px"></p>
 </div>
 </div>
 
 <script>
-function sw(t){fl.style.display=t=='l'?'block':'none';fr.style.display=t=='r'?'block':'none';}
-function reg(){let n=rN.value,e=rE.value,p=rP.value;if(!n||!e||!p){aMsg.textContent='Completá todo';return;}if(localStorage.getItem('u_'+e)){aMsg.textContent='Ya existe';return;}localStorage.setItem('u_'+e,JSON.stringify({n,e,p}));aMsg.style.color='green';aMsg.textContent='¡Listo! Ahora entrá';sw('l');}
-function login(){let e=lE.value,p=lP.value,u=JSON.parse(localStorage.getItem('u_'+e)||'null');if(!u||u.p!==p){aMsg.textContent='Datos incorrectos';return;}localStorage.setItem('sess',e);applyUser(u);}
-function applyUser(u){loginPanel.style.display='none';userNameTop.textContent=u.n;panelContent.innerHTML=`<div class=card><b>${u.n}</b><br>${u.e}<br><small>Cuenta activa ✅</small></div>`;pUserInfo.textContent=u.n+' • '+u.e;adminBox.style.display='block';}
-function requireAuth(){if(!localStorage.getItem('sess')){alert('Logeate primero');return false;}return true;}
+function sw(t){
+ document.getElementById('fl').style.display=t=='l'?'block':'none';
+ document.getElementById('fr').style.display=t=='r'?'block':'none';
+ document.getElementById('aMsg').textContent='';
+}
+function getUsers(){
+ return JSON.parse(localStorage.getItem('users_db')||'{}');
+}
+function saveUsers(u){
+ localStorage.setItem('users_db',JSON.stringify(u));
+}
+function reg(){
+ let n=document.getElementById('rN').value.trim();
+ let e=document.getElementById('rE').value.trim().toLowerCase();
+ let p=document.getElementById('rP').value;
+ let msg=document.getElementById('aMsg');
+ if(!n||!e||!p){msg.style.color='red';msg.textContent='Completá nombre, email y contraseña';return;}
+ if(!e.includes('@')){msg.textContent='Email inválido';return;}
+ let users=getUsers();
+ if(users[e]){msg.style.color='red';msg.textContent='Ese email ya está registrado, hacé login';return;}
+ users[e]={n:n,e:e,p:p,created:Date.now()};
+ saveUsers(users);
+ msg.style.color='green';msg.textContent='✅ Registrado! Ahora hacé login';
+ setTimeout(()=>sw('l'),800);
+}
+function login(){
+ let e=document.getElementById('lE').value.trim().toLowerCase();
+ let p=document.getElementById('lP').value;
+ let msg=document.getElementById('aMsg');
+ let users=getUsers();
+ let u=users[e];
+ if(!u){msg.style.color='red';msg.textContent='No existe ese email, registrate primero';return;}
+ if(u.p!==p){msg.style.color='red';msg.textContent='Contraseña incorrecta';return;}
+ localStorage.setItem('sess',e);
+ applyUser(u);
+}
+function applyUser(u){
+ document.getElementById('loginPanel').style.display='none';
+ document.getElementById('userNameTop').textContent=u.n;
+ document.getElementById('panelContent').innerHTML=`<div class=card><b>${u.n}</b><br>${u.e}<br><small>Cuenta activa ✅</small></div>`;
+ document.getElementById('pUserInfo').textContent=u.n+' • '+u.e;
+ document.getElementById('adminBox').style.display='block';
+}
+function requireAuth(){
+ if(!localStorage.getItem('sess')){alert('Logeate primero');return false;}
+ return true;
+}
 function logout(){localStorage.removeItem('sess');location.reload();}
-function openFullPanel(){if(!localStorage.getItem('sess')){alert('Logeate primero');return;}panelPage.classList.add('active');document.body.style.overflow='hidden';}
-function closeFullPanel(){panelPage.classList.remove('active');document.body.style.overflow='';}
-function show(id){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
-let s=localStorage.getItem('sess');if(s){let u=JSON.parse(localStorage.getItem('u_'+s)||'null');if(u)applyUser(u);}
+function openFullPanel(){
+ if(!localStorage.getItem('sess')){alert('Logeate primero');return;}
+ document.getElementById('panelPage').classList.add('active');
+ document.body.style.overflow='hidden';
+}
+function closeFullPanel(){
+ document.getElementById('panelPage').classList.remove('active');
+ document.body.style.overflow='';
+}
+function show(id){
+ document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ window.scrollTo(0,0);
+}
+// auto-login
+(function(){
+ let s=localStorage.getItem('sess');
+ if(!s) return;
+ let users=getUsers();
+ let u=users[s];
+ if(u) applyUser(u);
+})();
 </script>
 </body>
 </html
