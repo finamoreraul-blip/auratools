@@ -2,304 +2,286 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel Emprendedor Completo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Emprendedor PRO</title>
 <style>
-*{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
-body{margin:0;background:#f0f2f5;color:#222}
-.topbar{background:#111;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
-.topbar.logo{font-weight:bold;font-size:18px}
-.user-panel{background:#fff;color:#111;padding:8px 16px;border-radius:25px;font-size:14px;cursor:pointer;font-weight:600}
-nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;background:#1e1e1e;padding:10px;position:sticky;top:52px;z-index:10}
-nav button{background:#333;color:#fff;border:0;padding:10px 16px;border-radius:25px;cursor:pointer;font-size:14px}
-nav button:hover{background:#555}
-section{display:none;max-width:980px;margin:14px auto;background:#fff;padding:22px;border-radius:18px;box-shadow:0 3px 12px rgba(0,0,0,.08)}
-section.active{display:block}
-h3{margin-top:0}
-input,select,textarea{width:100%;padding:11px;margin:7px 0;border:1px solid #ddd;border-radius:12px;font-size:15px}
-.btn{background:#111;color:#fff;padding:12px 18px;border:0;border-radius:12px;cursor:pointer;margin:8px 6px 0 0;font-size:15px}
-.btn-sec{background:#e8e8e8;color:#111}
-label{font-size:13px;font-weight:600}
-table{width:100%;border-collapse:collapse;margin-top:14px}
-th,td{border:1px solid #eee;padding:10px;font-size:14px;text-align:left}
-th{background:#fafafa}
-#loginPanel{position:fixed;inset:0;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;z-index:100}
-.login-box{background:#fff;padding:32px;border-radius:22px;width:92%;max-width:400px;text-align:center}
-.palette{display:flex;gap:10px;margin:12px 0;flex-wrap:wrap}
+:root{--bg:#f4f6fb;--card:#fff;--dark:#111;--acc:#6c5ce7}
+*{box-sizing:border-box;font-family:'Segoe UI',system-ui}
+body{margin:0;background:var(--bg);color:#222}
+.topbar{background:var(--dark);color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
+.user-panel{background:#fff;color:#111;padding:8px 16px;border-radius:25px;font-weight:700;cursor:pointer;border:0}
+nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;background:#1c1c22;padding:10px;position:sticky;top:53px;z-index:15}
+nav button{background:#2d2d35;color:#fff;border:0;padding:10px 14px;border-radius:20px;cursor:pointer}
+nav button:hover{background:var(--acc)}
+section{display:none;max-width:1000px;margin:16px auto;background:var(--card);padding:24px;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+section.active{display:block;animation:fade.25s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+input,textarea,select{width:100%;padding:12px;margin:7px 0;border:1px solid #e1e4ea;border-radius:12px;font-size:15px}
+label{font-weight:600;font-size:13px}
+.btn{background:var(--dark);color:#fff;padding:12px 18px;border:0;border-radius:12px;margin:8px 6px 0 0;cursor:pointer;font-weight:600}
+.btn-acc{background:var(--acc)}
+.btn-sec{background:#eceef3;color:#111}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{border:1px solid #eef0f4;padding:10px;font-size:14px}
+th{background:#f8f9fc}
+#loginPanel{position:fixed;inset:0;background:rgba(10,10,15,.8);display:flex;align-items:center;justify-content:center;z-index:100}
+.login-box{background:#fff;padding:32px;border-radius:24px;width:92%;max-width:400px}
+#bannerPreview{width:100%;height:340px;position:relative;overflow:hidden;border-radius:18px;display:flex;justify-content:center;align-items:center;color:#fff;background:linear-gradient(135deg,#4a90e2,#9b59b6)}
+#bannerImg{max-height:68%;max-width:58%;object-fit:contain;z-index:2;border-radius:14px;position:relative;box-shadow:0 4px 15px rgba(0,0,0,.3)}
+.emoji-row{position:absolute;width:100%;display:flex;justify-content:space-around;opacity:.55;font-size:30px;pointer-events:none;z-index:1}
+.banner-text{position:absolute;z-index:3;text-align:center;padding:10px;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.small-social{position:absolute;bottom:10px;z-index:4;display:flex;gap:10px;background:rgba(0,0,0,.55);padding:6px 14px;border-radius:20px;font-size:12px}
+.palette{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 .color{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid #eee}
-#bannerPreview{width:100%;height:300px;position:relative;overflow:hidden;border-radius:18px;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;background:linear-gradient(135deg,#4a90e2,#9b59b6);text-align:center;padding:24px;margin-top:12px}
-.emoji-bg{position:absolute;font-size:34px;opacity:.6;pointer-events:none}
-.small-social{position:absolute;bottom:10px;font-size:12px;display:flex;gap:12px;background:rgba(0,0,0,.45);padding:6px 14px;border-radius:20px}
-.template{border:2px solid #eee;border-radius:12px;padding:12px;cursor:pointer;margin:5px;display:inline-block;background:#fafafa}
-.template:hover{border-color:#111}
-.chatbox{border:1px solid #eee;height:240px;overflow:auto;padding:12px;border-radius:12px;background:#fafafa}
-.criterios{background:#f9f9f9;padding:16px;border-radius:12px;margin:12px 0}
+.card{background:#f8f9fc;padding:14px;border-radius:14px;margin:8px 0}
+#panelPage{display:none;position:fixed;inset:0;background:#eef1f6;z-index:60;overflow:auto}
+#panelPage.active{display:block}
+.panel-header{background:#111;color:#fff;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;padding:20px;max-width:1200px;margin:auto}
 </style>
 </head>
 <body>
-
 <div class="topbar">
-<div class="logo">🚀 Mi Emprendimiento</div>
-<div class="user-panel" onclick="alert('Panel del emprendedor:\n- Mi perfil\n- Mis productos\n- Mis banners\n- Mis finanzas\n- Cerrar sesión')">👤 Panel Emprendedor ▼</div>
+<div>🚀 <b>Emprendedor PRO</b></div>
+<button class="user-panel" onclick="openFullPanel()">👤 <span id="userNameTop">Entrar</span> →</button>
 </div>
-
 <nav>
-<button onclick="show('calc')">1 Calculadora</button>
-<button onclick="show('finanzas')">2 Finanzas</button>
-<button onclick="show('descrip')">3 Descrip IA</button>
-<button onclick="show('consejos')">4 Consejos IA</button>
-<button onclick="show('stock')">5 Stock</button>
-<button onclick="show('fotopro')">6 Foto Pro</button>
-<button onclick="show('banner')">7 Banner</button>
-<button onclick="show('post')">8 Post Redes</button>
-<button onclick="show('marketing')">9 Marketing</button>
+<button onclick="show('calc')">Calculadora</button>
+<button onclick="show('finanzas')">Finanzas</button>
+<button onclick="show('descrip')">Descripción</button>
+<button onclick="show('consejos')">Consejos</button>
+<button onclick="show('stock')">Stock</button>
+<button onclick="show('fotopro')">Foto Pro</button>
+<button onclick="show('banner')">Banner</button>
+<button onclick="show('post')">Post</button>
+<button onclick="show('marketing')">Marketing</button>
 </nav>
 
-<!-- 1 -->
 <section id="calc" class="active">
-<h3>1. Calculadora - Solo resultado</h3>
-<p>Muestra solo el resultado final.</p>
-<input id="calcInput" placeholder="Ej: (150+30)*1.21">
-<button class="btn" onclick="calcSegura()">Calcular</button>
-<h2 id="calcRes" style="font-size:32px">Resultado: </h2>
+<h3>🧮 Calculadora de margen</h3>
+<label>Costo del producto</label>
+<input id="cCosto" type="number" placeholder="1000">
+<label>Precio de venta</label>
+<input id="cVenta" type="number" placeholder="1800">
+<label>Otros gastos</label>
+<input id="cOtros" type="number" placeholder="200">
+<button class="btn btn-acc" onclick="calcMargen()">Calcular</button>
+<div id="cRes" class="card"></div>
 <script>
-function calcSegura(){
-try{
-let v=document.getElementById('calcInput').value.replace(/[^0-9+\-*/(). ]/g,'');
-if(!v) return;
-let r=Function('"use strict";return ('+v+')')();
-document.getElementById('calcRes').innerText='Resultado: '+r;
-}catch(e){document.getElementById('calcRes').innerText='Error en cálculo';}
+function calcMargen(){
+let c=+cCosto.value||0,v=+cVenta.value||0,o=+cOtros.value||0,tc=c+o,g=v-tc,m=v?g/v*100:0;
+let msg=m<20?"🔴 Margen bajo: SUBÍ el precio":m<35?"🟡 Margen justo: podés subir un poco":m<=60?"🟢 Margen saludable":"🔵 Margen alto: podés BAJAR para vender más";
+cRes.innerHTML=`Costo total: $${tc}<br>Ganancia neta: <b>$${g}</b><br>Margen: <b>${m.toFixed(1)}%</b><br><br>${msg}`;
 }
 </script>
 </section>
 
-<!-- 2 -->
 <section id="finanzas">
-<h3>2. Finanzas</h3>
-<p><b>Importante:</b> Cada cuenta nueva resetea. No suma ni resta acumulado.</p>
-<input id="finNombre" placeholder="Nombre de la cuenta (ej: Enero)">
-<input id="finMonto" type="number" placeholder="Monto inicial">
-<input id="finNota" placeholder="Nota opcional">
-<button class="btn" onclick="nuevaCuenta()">Crear nueva cuenta (reset)</button>
-<h3 id="finRes" style="margin-top:16px">Total: $0</h3>
-<p id="finHist"></p>
+<h3>💰 Finanzas</h3>
+<label>Fecha</label><input type="date" id="fFecha">
+<label>Nombre cuenta</label><input id="fNombre" placeholder="Ej: Febrero">
+<label>Ingresos</label><input id="fIng" type="number">
+<label>Egresos</label><input id="fEgr" type="number">
+<label>Detalle</label><input id="fDet">
+<button class="btn btn-acc" onclick="guardarFin()">💾 Guardar en panel</button>
 <script>
-function nuevaCuenta(){
-let m=parseFloat(document.getElementById('finMonto').value||0);
-let n=document.getElementById('finNombre').value||'Sin nombre';
-document.getElementById('finRes').innerText='Total '+n+': $'+m;
-document.getElementById('finHist').innerText='Cuenta creada el '+new Date().toLocaleString()+' - Reseteada correctamente.';
+function guardarFin(){
+if(!requireAuth())return;
+let b=(+fIng.value||0)-(+fEgr.value||0);
+let el=document.createElement('div');
+el.className='card';
+el.innerHTML=`<b>${fNombre.value}</b> ${fFecha.value}<br>+$${fIng.value} -$${fEgr.value} = <b>$${b}</b><br><small>${fDet.value}</small>`;
+document.getElementById('pFinanzasFull').appendChild(el);
+alert('Guardado ✅');
 }
 </script>
 </section>
 
-<!-- 3 -->
 <section id="descrip">
-<h3>3. Descripción IA - 100% IA, no repite</h3>
-<input type="file" id="prodFoto" accept="image/*">
-<input id="prodNombre" placeholder="Nombre del producto">
-<input id="prodMarca" placeholder="Marca">
-<textarea id="prodExtra" placeholder="Color, tamaño, material y demás datos"></textarea>
-<button class="btn" onclick="alert('Conectamos API juntos')">✨ Generar 3 versiones con IA</button>
-<button class="btn btn-sec" onclick="buscarML()">🔍 Buscar en Mercado Libre</button>
-<div id="descripOut" style="margin-top:12px;background:#f9f9f9;padding:14px;border-radius:12px"></div>
+<h3>✨ Descripción IA</h3>
+<input type="file" accept="image/*">
+<input id="dNom" placeholder="Nombre producto">
+<input id="dMar" placeholder="Marca">
+<textarea id="dDat" placeholder="Datos extra"></textarea>
+<button class="btn btn-acc" onclick="genDesc()">Generar 3 versiones</button>
+<button class="btn btn-sec" onclick="window.open('https://listado.mercadolibre.com.ar/'+encodeURIComponent(dNom.value))">Buscar en ML</button>
+<div id="dOut"></div>
 <script>
-function buscarML(){
-let n=document.getElementById('prodNombre').value;
-if(!n){alert('Poné un nombre primero');return;}
-window.open('https://listado.mercadolibre.com.ar/'+encodeURIComponent(n),'_blank');
+const bases=["🔥 OFERTA","✨ NUEVO","💎 PREMIUM"];
+function genDesc(){
+let n=dNom.value||'producto',m=dMar.value||'';
+dOut.innerHTML=bases.map((b,i)=>`<div class=card><b>${b}:</b> ${n} ${m} calidad garantizada. Versión ${i+1} única #${Math.random().toString(36).slice(2,7)}</div>`).join('');
 }
 </script>
 </section>
 
-<!-- 4 -->
 <section id="consejos">
-<h3>4. Consejos - Chat IA</h3>
-<div class="chatbox" id="chatBox"><p><b>IA:</b> Hola, soy tu asesor. Preguntame lo que necesites.</p></div>
-<input id="chatIn" placeholder="Escribí tu pregunta...">
-<button class="btn" onclick="enviarChat()">Enviar</button>
+<h3>🤖 Consejos IA</h3>
+<div id="chatBox" class="card" style="height:220px;overflow:auto"></div>
+<input id="chatIn" placeholder="Preguntá...">
+<button class="btn" onclick="sendChat()">Enviar</button>
 <script>
-function enviarChat(){
-let v=document.getElementById('chatIn').value;
-if(!v) return;
-let b=document.getElementById('chatBox');
-b.innerHTML+="<p><b>Tú:</b> "+v+"</p><p><b>IA:</b> (Aquí conectamos la API juntos)</p>";
-document.getElementById('chatIn').value='';
-b.scrollTop=b.scrollHeight;
+function sendChat(){
+let v=chatIn.value;if(!v)return;
+chatBox.innerHTML+=`<p><b>Vos:</b> ${v}</p><p><b>IA:</b> Te recomiendo enfocarte en fotos y precios competitivos. (API se conecta juntos)</p>`;
+chatIn.value='';chatBox.scrollTop=9999;
 }
 </script>
 </section>
 
-<!-- 5 -->
 <section id="stock">
-<h3>5. Stock</h3>
-<input id="sNom" placeholder="Nombre producto">
+<h3>📦 Stock</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<input id="sNom" placeholder="Producto" style="grid-column:1/3">
 <input id="sCant" type="number" placeholder="Cantidad">
-<input id="sCV" placeholder="C/V">
-<input id="sMay" placeholder="Venta mayorista">
-<input id="sMin" placeholder="Venta minorista">
-<input id="sDesc" placeholder="Descuento %">
-<button class="btn" onclick="agregarStock()">Agregar producto</button>
-<p id="stockMsg" style="color:green;font-weight:bold"></p>
+<input id="sCosto" type="number" placeholder="Costo">
+<input id="sMay" type="number" placeholder="Venta mayorista">
+<input id="sMin" type="number" placeholder="Venta minorista" oninput="calcD()">
+<input id="sDesc" type="number" placeholder="Descuento %" oninput="calcD()">
+<div id="sDescRes" class="card" style="grid-column:1/3"></div>
+</div>
+<button class="btn btn-acc" onclick="addStock()">Agregar</button>
 <table>
-<thead><tr><th>Producto</th><th>Cantidad</th><th>C/V</th><th>Mayorista</th><th>Minorista</th><th>Descuento</th></tr></thead>
+<thead><tr><th>Prod</th><th>Cant</th><th>Costo</th><th>May</th><th>Min</th><th>%</th><th>Final</th></tr></thead>
 <tbody id="stockTb"></tbody>
 </table>
 <script>
-function agregarStock(){
-let tb=document.getElementById('stockTb');
-tb.innerHTML+=`<tr><td>${document.getElementById('sNom').value}</td><td>${document.getElementById('sCant').value}</td><td>${document.getElementById('sCV').value}</td><td>${document.getElementById('sMay').value}</td><td>${document.getElementById('sMin').value}</td><td>${document.getElementById('sDesc').value}</td></tr>`;
-document.getElementById('stockMsg').innerText='AGREGADO ✅';
+let pf=0;
+function calcD(){let v=+sMin.value||0,d=+sDesc.value||0;pf=v-v*d/100;sDescRes.innerHTML=d?`Con ${d}%: <b>$${pf.toFixed(2)}</b>`:'';}
+function addStock(){
+stockTb.innerHTML+=`<tr><td>${sNom.value}</td><td>${sCant.value}</td><td>$${sCosto.value}</td><td>$${sMay.value}</td><td>$${sMin.value}</td><td>${sDesc.value}%</td><td><b>$${pf.toFixed(2)}</b></td></tr>`;
+document.getElementById('pStockFull').innerHTML+=`<div class=card>${sNom.value} x${sCant.value} - $${pf.toFixed(2)}</div>`;
 }
 </script>
 </section>
 
-<!-- 6 -->
 <section id="fotopro">
-<h3>6. Foto Pro</h3>
-<input type="file" id="fotoUp" accept="image/*">
-<div style="margin:12px 0">
-<label>Brillo</label><input type="range" id="br" min="0" max="200" value="100">
-<label>Contraste</label><input type="range" id="ct" min="0" max="200" value="100">
-<label>Saturación</label><input type="range" id="st" min="0" max="200" value="100">
-<label>Calidez</label><input type="range" id="wr" min="0" max="200" value="100">
+<h3>📸 Foto Pro</h3>
+<input type="file" id="fUp" accept="image/*">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0">
+<div><label>Brillo</label><input type="range" id="rB" min="0" max="200" value="100"></div>
+<div><label>Contraste</label><input type="range" id="rC" min="0" max="200" value="100"></div>
+<div><label>Saturación</label><input type="range" id="rS" min="0" max="200" value="100"></div>
+<div><label>Nitidez</label><input type="range" id="rN" min="0" max="200" value="100"></div>
 </div>
-<img id="fotoPrev" style="max-width:100%;border-radius:14px;display:block;margin:auto">
-<div style="margin-top:12px">
-<button class="btn" onclick="descargarFoto('historia-ig-1080x1920')">📥 Historia IG (1080x1920)</button>
-<button class="btn" onclick="descargarFoto('post-ig-1080x1080')">📥 Post IG (1080x1080)</button>
-<button class="btn" onclick="descargarFoto('historia-fb')">📥 Historia FB</button>
-<button class="btn" onclick="descargarFoto('post-fb')">📥 Post FB</button>
-</div>
+<img id="fPrev" style="max-width:100%;border-radius:16px"><br>
+<button class="btn" onclick="dl('historia-1080x1920')">Historia IG/FB</button>
+<button class="btn" onclick="dl('post-1080x1080')">Post IG/FB</button>
 <script>
-document.getElementById('fotoUp').onchange=e=>{document.getElementById('fotoPrev').src=URL.createObjectURL(e.target.files[0]);};
-function upd(){let b=br.value,c=ct.value,s=st.value;document.getElementById('fotoPrev').style.filter=`brightness(${b}%) contrast(${c}%) saturate(${s}%)`;}
-br.oninput=upd;ct.oninput=upd;st.oninput=upd;
-function descargarFoto(f){let img=document.getElementById('fotoPrev');if(!img.src){alert('Subí una foto primero');return;}let a=document.createElement('a');a.href=img.src;a.download=f+'.jpg';a.click();}
+fUp.onchange=e=>fPrev.src=URL.createObjectURL(e.target.files[0]);
+function up(){fPrev.style.filter=`brightness(${rB.value}%) contrast(${rC.value}%) saturate(${rS.value}%)`;}
+rB.oninput=up;rC.oninput=up;rS.oninput=up;
+function dl(n){let a=document.createElement('a');a.href=fPrev.src;a.download=n+'.jpg';a.click();}
 </script>
 </section>
 
-<!-- 7 -->
 <section id="banner">
-<h3>7. Banner - Estilo Canva</h3>
-<p><b>Plantillas:</b></p>
-<div>
-<div class="template" onclick="setBanner('linear-gradient(135deg,#ff6a00,#ee0979)')">🔥 Oferta caliente</div>
-<div class="template" onclick="setBanner('linear-gradient(135deg,#11998e,#38ef7d)')">🌿 Natural / Orgánico</div>
-<div class="template" onclick="setBanner('linear-gradient(135deg,#232526,#414345)')">⚫ Premium Elegante</div>
-<div class="template" onclick="setBanner('linear-gradient(135deg,#4a90e2,#9b59b6)')">💜 Creativo</div>
+<h3>🎨 Banner Canva Pro</h3>
+<input type="file" id="bUp" accept="image/*">
+<div class="palette" id="pal"></div>
+<div id="eBtns"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<input id="bT" placeholder="Título" oninput="rb()">
+<input id="bS" placeholder="Subtítulo" oninput="rb()">
+<input id="bI" placeholder="Instagram" oninput="rb()">
+<input id="bF" placeholder="Facebook" oninput="rb()">
+<input id="bH" placeholder="#hashtag" oninput="rb()" style="grid-column:1/3">
 </div>
-<p><b>Paleta de colores (emprendedor elige):</b></p>
-<div class="palette" id="palette"></div>
-<p><b>Emojis WhatsApp - tocá para desplegar en fondo (espaciados):</b></p>
-<div id="emojiBtns" style="font-size:22px"></div>
-<input id="bTitle" placeholder="Título del banner" oninput="renderBanner()">
-<input id="bSub" placeholder="Subtítulo" oninput="renderBanner()">
-<input id="bHash" placeholder="#hashtags ej: #oferta #nuevo" oninput="renderBanner()">
-<input id="bIg" placeholder="Cuenta Instagram ej: @miemprendimiento" oninput="renderBanner()">
-<input id="bFb" placeholder="Facebook / Web" oninput="renderBanner()">
 <div id="bannerPreview">
-<h2 id="pvTitle" style="margin:0;font-size:28px"></h2>
-<p id="pvSub" style="margin:6px 0"></p>
-<div class="small-social"><span id="pvIg"></span><span id="pvFb"></span><span id="pvHash"></span></div>
+<img id="bannerImg" style="display:none">
+<div class="banner-text"><h2 id="pT" style="margin:0;font-size:32px"></h2><p id="pS"></p></div>
+<div class="small-social"><span id="pI"></span><span id="pF"></span><span id="pH"></span></div>
 </div>
-<button class="btn" onclick="alert('Descargar banner como PNG')">📥 Descargar Banner</button>
+<button class="btn btn-sec" onclick="undo()">↩ Deshacer</button>
+<button class="btn" onclick="alert('Descargando PNG...')">📥 Descargar</button>
 <script>
-function setBanner(g){document.getElementById('bannerPreview').style.background=g;}
-let cols=['#4a90e2','#e94e77','#2ecc71','#f39c12','#9b59b6','#111111','#ff6a00','#00c9ff'];
-let pal=document.getElementById('palette');
-cols.forEach(c=>{let d=document.createElement('div');d.className='color';d.style.background=c;d.onclick=()=>{document.getElementById('bannerPreview').style.background=c;};pal.appendChild(d);});
-let emojis=["😀","😂","🔥","💯","🎉","⭐","💡","🛒","❤️","✨","🚀","👍","💪","🎁","🤑","😍"];
-let eb=document.getElementById('emojiBtns');
-emojis.forEach(e=>{let b=document.createElement('button');b.innerText=e;b.style.fontSize='24px';b.style.margin='4px';b.onclick=()=>{let prev=document.getElementById('bannerPreview');for(let i=0;i<4;i++){let s=document.createElement('span');s.className='emoji-bg';s.innerText=e;s.style.left=(10+Math.random()*75)+'%';s.style.top=(10+Math.random()*60)+'%';prev.appendChild(s);}};eb.appendChild(b);});
-function renderBanner(){
-document.getElementById('pvTitle').innerText=document.getElementById('bTitle').value;
-document.getElementById('pvSub').innerText=document.getElementById('bSub').value;
-document.getElementById('pvIg').innerText='📸 '+document.getElementById('bIg').value;
-document.getElementById('pvFb').innerText='📘 '+document.getElementById('bFb').value;
-document.getElementById('pvHash').innerText=document.getElementById('bHash').value;
-}
+let hist=[];const bp=document.getElementById('bannerPreview');
+function save(){hist.push(bp.innerHTML);if(hist.length>20)hist.shift();}
+function undo(){if(hist.length)bp.innerHTML=hist.pop();}
+bUp.onchange=e=>{save();let i=document.getElementById('bannerImg');i.src=URL.createObjectURL(e.target.files[0]);i.style.display='block';};
+['#4a90e2','#e94e77','#2ecc71','#f39c12','#9b59b6','#111','#ff6a00'].forEach(c=>{let d=document.createElement('div');d.className='color';d.style.background=c;d.onclick=()=>{save();bp.style.background=c;};pal.appendChild(d);});
+["🔥","⭐","❤️","✨","🚀"].forEach(em=>{let b=document.createElement('button');b.textContent=em;b.style.fontSize='24px';b.onclick=()=>{save();for(let r=0;r<3;r++){let row=document.createElement('div');row.className='emoji-row';row.style.top=(18+r*28)+'%';row.textContent=(em+' ').repeat(10);bp.appendChild(row);}};eBtns.appendChild(b);});
+function rb(){pT.textContent=bT.value;pS.textContent=bS.value;pI.textContent=bI.value;pF.textContent=bF.value;pH.textContent=bH.value;}
 </script>
 </section>
 
-<!-- 8 -->
 <section id="post">
-<h3>8. Post para Redes</h3>
-<input type="file" accept="image/*" onchange="document.getElementById('postPrevImg').src=URL.createObjectURL(event.target.files[0])">
-<img id="postPrevImg" style="max-width:100%;border-radius:14px;margin:10px 0">
-<input placeholder="Página Facebook - link o nombre">
-<input placeholder="Instagram - link o @usuario">
-<input placeholder="Página web">
-<input placeholder="Número WhatsApp">
-<input placeholder="Link catálogo">
-<textarea id="postTxt" placeholder="Texto del post (no se repite, 100% IA)"></textarea>
-<button class="btn" onclick="generarPost()">✨ Generar post único</button>
-<p><b>Vista previa (con foto):</b></p>
-<div id="postPrev" style="border:2px dashed #ccc;padding:16px;border-radius:14px;background:#fafafa"></div>
+<h3>📱 Post Redes</h3>
+<input type="file" accept="image/*" onchange="pImg.src=URL.createObjectURL(event.target.files[0])">
+<img id="pImg" style="max-width:100%;border-radius:14px">
+<textarea id="ptTxt" placeholder="Texto del post"></textarea>
+<button class="btn btn-acc" onclick="genP()">Generar vista previa</button>
+<div id="pPrev" class="card"></div>
+<button class="btn btn-sec" onclick="navigator.clipboard.writeText(pPrev.innerText);alert('Copiado ✅')">📋 Copiar todo</button>
 <script>
-function generarPost(){
-let t=document.getElementById('postTxt').value;
-let uniq=Math.random().toString(36).substring(7);
-document.getElementById('postPrev').innerHTML='<p>'+t+'</p><p style="color:#888">Versión única #'+uniq+' - No repetida</p>';
-}
+function genP(){pPrev.innerText=ptTxt.value+"\n\n#"+Math.random().toString(36).slice(2,7)+" - Post único";}
 </script>
 </section>
 
-<!-- 9 -->
 <section id="marketing">
-<h3>9. SECCIÓN MARKETING (aparte, completo)</h3>
-<div class="criterios">
-<h4>📋 Todos los criterios descargables:</h4>
-<ul>
-<li>1. Definición de público objetivo y buyer persona</li>
-<li>2. Propuesta de valor diferencial</li>
-<li>3. Estrategia de contenido (30 días)</li>
-<li>4. Embudo de ventas: atracción-conversión-fidelización</li>
-<li>5. Publicidad paga: Facebook / Instagram Ads</li>
-<li>6. WhatsApp Business y catálogo</li>
-<li>7. Métricas: alcance, CTR, conversión, ROI</li>
-<li>8. Promociones y descuentos efectivos</li>
-<li>9. Fotografía y branding</li>
-<li>10. Fidelización y reseñas</li>
-</ul>
-<button class="btn" onclick="window.print()">📥 Descargar todos los criterios (PDF)</button>
+<h3>📈 Marketing</h3>
+<div style="display:grid;gap:10px">
+<div class="card"><b>1. Público objetivo</b><br>Definí edad, gustos y dónde está tu cliente.</div>
+<div class="card"><b>2. Propuesta de valor</b><br>Por qué te eligen a vos.</div>
+<div class="card"><b>3. Identidad de marca</b><br>Colores, logo y tono de comunicación.</div>
+<div class="card"><b>4. Contenido 30 días</b><br>Calendario de posteos.</div>
+<div class="card"><b>5. Embudo de ventas</b><br>Atraer → Convertir → Fidelizar.</div>
+<div class="card"><b>6. Publicidad paga</b><br>Ads en IG/FB.</div>
+<div class="card"><b>7. WhatsApp Business</b><br>Catálogo y respuestas rápidas.</div>
+<div class="card"><b>8. Fotografía producto</b><br>Fotos que venden.</div>
+<div class="card"><b>9. Promociones</b><br>Descuentos estratégicos.</div>
+<div class="card"><b>10. Métricas</b><br>Medí alcance y ventas.</div>
 </div>
-<h4>🎥 Videos gratis de marketing (solo pegá el link YouTube)</h4>
-<input id="ytLink" placeholder="https://youtube.com/...">
-<button class="btn" onclick="addYt()">Anexar video</button>
-<div id="ytList" style="margin-top:12px"></div>
+<button class="btn" onclick="window.print()">📥 Descargar criterios</button>
+<div id="adminBox" style="display:none;margin-top:12px" class="card">
+<b>Solo emprendedor:</b>
+<input id="ytL" placeholder="Link YouTube">
+<button class="btn" onclick="addY()">Anexar video</button>
+</div>
+<div id="ytLlist"></div>
 <script>
-function addYt(){
-let l=document.getElementById('ytLink').value;
-if(!l) return;
-let id=l.split('v=')[1]?.split('&')[0]||'';
-let emb=id?`<iframe width="100%" height="250" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe>`:`<a href="${l}" target="_blank">${l}</a>`;
-document.getElementById('ytList').innerHTML+=`<div style="margin:10px 0">${emb}</div>`;
-document.getElementById('ytLink').value='';
-}
+function addY(){let v=ytL.value;if(!v)return;ytLlist.innerHTML+=`<div class=card><a href="${v}" target="_blank">${v}</a></div>`;document.getElementById('pVidFull').innerHTML+=`<div class=card><a href="${v}" target="_blank">${v}</a></div>`;ytL.value='';}
 </script>
 </section>
 
-<!-- LOGIN -->
+<div id="panelPage">
+<div class="panel-header">
+<div><h2 style="margin:0">👤 Panel del Emprendedor</h2><small id="pUserInfo"></small></div>
+<button class="user-panel" onclick="closeFullPanel()">✕ Volver</button>
+</div>
+<div class="grid">
+<div class="card"><h3>📊 Mi cuenta</h3><div id="panelContent"></div><button class="btn btn-sec" onclick="logout()">Cerrar sesión</button></div>
+<div class="card"><h3>💰 Mis finanzas</h3><div id="pFinanzasFull"></div></div>
+<div class="card"><h3>📦 Mi stock</h3><div id="pStockFull"></div></div>
+<div class="card"><h3>🎨 Mis diseños</h3><p>Tus banners y fotos</p></div>
+<div class="card"><h3>🎥 Mis videos</h3><div id="pVidFull"></div></div>
+<div class="card"><h3>📈 Marketing</h3><p>Tu progreso</p></div>
+</div>
+</div>
+
 <div id="loginPanel">
 <div class="login-box">
-<h2>👋 Bienvenido</h2>
-<p>Ingresá a tu panel de emprendedor</p>
-<input placeholder="Email">
-<input type="password" placeholder="Contraseña">
-<button class="btn" style="width:100%" onclick="document.getElementById('loginPanel').style.display='none'">Iniciar sesión</button>
-<button class="btn btn-sec" style="width:100%" onclick="document.getElementById('loginPanel').style.display='none'">Registrarse</button>
-<button class="btn btn-sec" style="width:100%" onclick="document.getElementById('loginPanel').style.display='none'">Continuar como invitado</button>
+<div style="display:flex;gap:8px">
+<button class="btn" style="flex:1" onclick="sw('l')">Login</button>
+<button class="btn btn-sec" style="flex:1" onclick="sw('r')">Registro</button>
+</div>
+<div id="fl"><h3>Entrar</h3><input id="lE" placeholder="Email"><input id="lP" type="password" placeholder="Contraseña"><button class="btn btn-acc" style="width:100%" onclick="login()">Entrar</button></div>
+<div id="fr" style="display:none"><h3>Crear cuenta</h3><input id="rN" placeholder="Nombre"><input id="rE" placeholder="Email"><input id="rP" type="password" placeholder="Contraseña"><button class="btn btn-acc" style="width:100%" onclick="reg()">Registrarme</button></div>
+<p id="aMsg" style="color:red"></p>
 </div>
 </div>
 
 <script>
-function show(id){
-document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-window.scrollTo(0,0);
-}
+function sw(t){fl.style.display=t=='l'?'block':'none';fr.style.display=t=='r'?'block':'none';}
+function reg(){let n=rN.value,e=rE.value,p=rP.value;if(!n||!e||!p){aMsg.textContent='Completá todo';return;}if(localStorage.getItem('u_'+e)){aMsg.textContent='Ya existe';return;}localStorage.setItem('u_'+e,JSON.stringify({n,e,p}));aMsg.style.color='green';aMsg.textContent='¡Listo! Ahora entrá';sw('l');}
+function login(){let e=lE.value,p=lP.value,u=JSON.parse(localStorage.getItem('u_'+e)||'null');if(!u||u.p!==p){aMsg.textContent='Datos incorrectos';return;}localStorage.setItem('sess',e);applyUser(u);}
+function applyUser(u){loginPanel.style.display='none';userNameTop.textContent=u.n;panelContent.innerHTML=`<div class=card><b>${u.n}</b><br>${u.e}<br><small>Cuenta activa ✅</small></div>`;pUserInfo.textContent=u.n+' • '+u.e;adminBox.style.display='block';}
+function requireAuth(){if(!localStorage.getItem('sess')){alert('Logeate primero');return false;}return true;}
+function logout(){localStorage.removeItem('sess');location.reload();}
+function openFullPanel(){if(!localStorage.getItem('sess')){alert('Logeate primero');return;}panelPage.classList.add('active');document.body.style.overflow='hidden';}
+function closeFullPanel(){panelPage.classList.remove('active');document.body.style.overflow='';}
+function show(id){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+let s=localStorage.getItem('sess');if(s){let u=JSON.parse(localStorage.getItem('u_'+s)||'null');if(u)applyUser(u);}
 </script>
 </body>
-</html>
+</html
