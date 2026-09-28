@@ -14,8 +14,7 @@ nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;background:#1c1c2
 nav button{background:#2d2d35;color:#fff;border:0;padding:10px 14px;border-radius:20px;cursor:pointer}
 nav button:hover{background:var(--acc)}
 section{display:none;max-width:1000px;margin:16px auto;background:var(--card);padding:24px;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
-section.active{display:block;animation:fade.25s}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+section.active{display:block}
 input,textarea,select{width:100%;padding:12px;margin:7px 0;border:1px solid #e1e4ea;border-radius:12px;font-size:15px}
 label{font-weight:600;font-size:13px}
 .btn{background:var(--dark);color:#fff;padding:12px 18px;border:0;border-radius:12px;margin:8px 6px 0 0;cursor:pointer;font-weight:600}
@@ -27,7 +26,7 @@ th{background:#f8f9fc}
 #loginPanel{position:fixed;inset:0;background:rgba(10,10,15,.8);display:flex;align-items:center;justify-content:center;z-index:100}
 .login-box{background:#fff;padding:32px;border-radius:24px;width:92%;max-width:400px}
 #bannerPreview{width:100%;height:340px;position:relative;overflow:hidden;border-radius:18px;display:flex;justify-content:center;align-items:center;color:#fff;background:linear-gradient(135deg,#4a90e2,#9b59b6)}
-#bannerImg{max-height:68%;max-width:58%;object-fit:contain;z-index:2;border-radius:14px;position:relative;box-shadow:0 4px 15px rgba(0,0,0,.3)}
+#bannerImg{max-height:68%;max-width:58%;object-fit:contain;z-index:2;border-radius:14px;position:relative}
 .emoji-row{position:absolute;width:100%;display:flex;justify-content:space-around;opacity:.55;font-size:30px;pointer-events:none;z-index:1}
 .banner-text{position:absolute;z-index:3;text-align:center;padding:10px;text-shadow:0 2px 8px rgba(0,0,0,.5)}
 .small-social{position:absolute;bottom:10px;z-index:4;display:flex;gap:10px;background:rgba(0,0,0,.55);padding:6px 14px;border-radius:20px;font-size:12px}
@@ -38,6 +37,7 @@ th{background:#f8f9fc}
 #panelPage.active{display:block}
 .panel-header{background:#111;color:#fff;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;padding:20px;max-width:1200px;margin:auto}
+#planillaModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;padding:20px;overflow:auto}
 </style>
 </head>
 <body>
@@ -59,21 +59,11 @@ th{background:#f8f9fc}
 
 <section id="calc" class="active">
 <h3>🧮 Calculadora de margen</h3>
-<label>Costo del producto</label>
-<input id="cCosto" type="number" placeholder="1000">
-<label>Precio de venta</label>
-<input id="cVenta" type="number" placeholder="1800">
-<label>Otros gastos</label>
-<input id="cOtros" type="number" placeholder="200">
-<button class="btn btn-acc" onclick="calcMargen()">Calcular</button>
+<label>Costo del producto</label><input id="cCosto" type="number" placeholder="1000">
+<label>Precio de venta</label><input id="cVenta" type="number" placeholder="1800">
+<label>Otros gastos</label><input id="cOtros" type="number" placeholder="200">
+<button class="btn btn-acc" onclick="calcMargen()">Calcular y guardar en panel</button>
 <div id="cRes" class="card"></div>
-<script>
-function calcMargen(){
-let c=+cCosto.value||0,v=+cVenta.value||0,o=+cOtros.value||0,tc=c+o,g=v-tc,m=v?g/v*100:0;
-let msg=m<20?"🔴 Margen bajo: SUBÍ el precio":m<35?"🟡 Margen justo: podés subir un poco":m<=60?"🟢 Margen saludable":"🔵 Margen alto: podés BAJAR para vender más";
-cRes.innerHTML=`Costo total: $${tc}<br>Ganancia neta: <b>$${g}</b><br>Margen: <b>${m.toFixed(1)}%</b><br><br>${msg}`;
-}
-</script>
 </section>
 
 <section id="finanzas">
@@ -84,17 +74,6 @@ cRes.innerHTML=`Costo total: $${tc}<br>Ganancia neta: <b>$${g}</b><br>Margen: <b
 <label>Egresos</label><input id="fEgr" type="number">
 <label>Detalle</label><input id="fDet">
 <button class="btn btn-acc" onclick="guardarFin()">💾 Guardar en panel</button>
-<script>
-function guardarFin(){
-if(!requireAuth())return;
-let b=(+fIng.value||0)-(+fEgr.value||0);
-let el=document.createElement('div');
-el.className='card';
-el.innerHTML=`<b>${fNombre.value}</b> ${fFecha.value}<br>+$${fIng.value} -$${fEgr.value} = <b>$${b}</b><br><small>${fDet.value}</small>`;
-document.getElementById('pFinanzasFull').appendChild(el);
-alert('Guardado ✅');
-}
-</script>
 </section>
 
 <section id="descrip">
@@ -104,15 +83,8 @@ alert('Guardado ✅');
 <input id="dMar" placeholder="Marca">
 <textarea id="dDat" placeholder="Datos extra"></textarea>
 <button class="btn btn-acc" onclick="genDesc()">Generar 3 versiones</button>
-<button class="btn btn-sec" onclick="window.open('https://listado.mercadolibre.com.ar/'+encodeURIComponent(dNom.value))">Buscar en ML</button>
+<button class="btn btn-sec" onclick="window.open('https://listado.mercadolibre.com.ar/'+encodeURIComponent(document.getElementById('dNom').value))">Buscar en ML</button>
 <div id="dOut"></div>
-<script>
-const bases=["🔥 OFERTA","✨ NUEVO","💎 PREMIUM"];
-function genDesc(){
-let n=dNom.value||'producto',m=dMar.value||'';
-dOut.innerHTML=bases.map((b,i)=>`<div class=card><b>${b}:</b> ${n} ${m} calidad garantizada. Versión ${i+1} única #${Math.random().toString(36).slice(2,7)}</div>`).join('');
-}
-</script>
 </section>
 
 <section id="consejos">
@@ -120,13 +92,6 @@ dOut.innerHTML=bases.map((b,i)=>`<div class=card><b>${b}:</b> ${n} ${m} calidad 
 <div id="chatBox" class="card" style="height:220px;overflow:auto"></div>
 <input id="chatIn" placeholder="Preguntá...">
 <button class="btn" onclick="sendChat()">Enviar</button>
-<script>
-function sendChat(){
-let v=chatIn.value;if(!v)return;
-chatBox.innerHTML+=`<p><b>Vos:</b> ${v}</p><p><b>IA:</b> Te recomiendo enfocarte en fotos y precios competitivos. (API se conecta juntos)</p>`;
-chatIn.value='';chatBox.scrollTop=9999;
-}
-</script>
 </section>
 
 <section id="stock">
@@ -141,18 +106,7 @@ chatIn.value='';chatBox.scrollTop=9999;
 <div id="sDescRes" class="card" style="grid-column:1/3"></div>
 </div>
 <button class="btn btn-acc" onclick="addStock()">Agregar</button>
-<table>
-<thead><tr><th>Prod</th><th>Cant</th><th>Costo</th><th>May</th><th>Min</th><th>%</th><th>Final</th></tr></thead>
-<tbody id="stockTb"></tbody>
-</table>
-<script>
-let pf=0;
-function calcD(){let v=+sMin.value||0,d=+sDesc.value||0;pf=v-v*d/100;sDescRes.innerHTML=d?`Con ${d}%: <b>$${pf.toFixed(2)}</b>`:'';}
-function addStock(){
-stockTb.innerHTML+=`<tr><td>${sNom.value}</td><td>${sCant.value}</td><td>$${sCosto.value}</td><td>$${sMay.value}</td><td>$${sMin.value}</td><td>${sDesc.value}%</td><td><b>$${pf.toFixed(2)}</b></td></tr>`;
-document.getElementById('pStockFull').innerHTML+=`<div class=card>${sNom.value} x${sCant.value} - $${pf.toFixed(2)}</div>`;
-}
-</script>
+<table><thead><tr><th>Prod</th><th>Cant</th><th>Costo</th><th>May</th><th>Min</th><th>%</th><th>Final</th></tr></thead><tbody id="stockTb"></tbody></table>
 </section>
 
 <section id="fotopro">
@@ -165,183 +119,126 @@ document.getElementById('pStockFull').innerHTML+=`<div class=card>${sNom.value} 
 <div><label>Nitidez</label><input type="range" id="rN" min="0" max="200" value="100"></div>
 </div>
 <img id="fPrev" style="max-width:100%;border-radius:16px"><br>
-<button class="btn" onclick="dl('historia-1080x1920')">Historia IG/FB</button>
-<button class="btn" onclick="dl('post-1080x1080')">Post IG/FB</button>
-<script>
-fUp.onchange=e=>fPrev.src=URL.createObjectURL(e.target.files[0]);
-function up(){fPrev.style.filter=`brightness(${rB.value}%) contrast(${rC.value}%) saturate(${rS.value}%)`;}
-rB.oninput=up;rC.oninput=up;rS.oninput=up;
-function dl(n){let a=document.createElement('a');a.href=fPrev.src;a.download=n+'.jpg';a.click();}
-</script>
+<button class="btn" onclick="dlFoto('historia')">Historia IG/FB</button>
+<button class="btn" onclick="dlFoto('post')">Post IG/FB</button>
 </section>
 
 <section id="banner">
 <h3>🎨 Banner Canva Pro</h3>
 <input type="file" id="bUp" accept="image/*">
-<div class="palette" id="pal"></div>
-<div id="eBtns"></div>
+<div class="palette" id="pal"></div><div id="eBtns"></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-<input id="bT" placeholder="Título" oninput="rb()">
-<input id="bS" placeholder="Subtítulo" oninput="rb()">
-<input id="bI" placeholder="Instagram" oninput="rb()">
-<input id="bF" placeholder="Facebook" oninput="rb()">
+<input id="bT" placeholder="Título" oninput="rb()"><input id="bS" placeholder="Subtítulo" oninput="rb()">
+<input id="bI" placeholder="Instagram" oninput="rb()"><input id="bF" placeholder="Facebook" oninput="rb()">
 <input id="bH" placeholder="#hashtag" oninput="rb()" style="grid-column:1/3">
 </div>
-<div id="bannerPreview">
-<img id="bannerImg" style="display:none">
-<div class="banner-text"><h2 id="pT" style="margin:0;font-size:32px"></h2><p id="pS"></p></div>
-<div class="small-social"><span id="pI"></span><span id="pF"></span><span id="pH"></span></div>
-</div>
-<button class="btn btn-sec" onclick="undo()">↩ Deshacer</button>
+<div id="bannerPreview"><img id="bannerImg" style="display:none"><div class="banner-text"><h2 id="pT" style="margin:0;font-size:32px"></h2><p id="pS"></p></div><div class="small-social"><span id="pI"></span><span id="pF"></span><span id="pH"></span></div></div>
+<button class="btn btn-sec" onclick="undoB()">↩ Deshacer</button>
 <button class="btn" onclick="alert('Descargando PNG...')">📥 Descargar</button>
-<script>
-let hist=[];const bp=document.getElementById('bannerPreview');
-function save(){hist.push(bp.innerHTML);if(hist.length>20)hist.shift();}
-function undo(){if(hist.length)bp.innerHTML=hist.pop();}
-bUp.onchange=e=>{save();let i=document.getElementById('bannerImg');i.src=URL.createObjectURL(e.target.files[0]);i.style.display='block';};
-['#4a90e2','#e94e77','#2ecc71','#f39c12','#9b59b6','#111','#ff6a00'].forEach(c=>{let d=document.createElement('div');d.className='color';d.style.background=c;d.onclick=()=>{save();bp.style.background=c;};pal.appendChild(d);});
-["🔥","⭐","❤️","✨","🚀"].forEach(em=>{let b=document.createElement('button');b.textContent=em;b.style.fontSize='24px';b.onclick=()=>{save();for(let r=0;r<3;r++){let row=document.createElement('div');row.className='emoji-row';row.style.top=(18+r*28)+'%';row.textContent=(em+' ').repeat(10);bp.appendChild(row);}};eBtns.appendChild(b);});
-function rb(){pT.textContent=bT.value;pS.textContent=bS.value;pI.textContent=bI.value;pF.textContent=bF.value;pH.textContent=bH.value;}
-</script>
 </section>
 
 <section id="post">
 <h3>📱 Post Redes</h3>
-<input type="file" accept="image/*" onchange="pImg.src=URL.createObjectURL(event.target.files[0])">
+<input type="file" accept="image/*" onchange="document.getElementById('pImg').src=URL.createObjectURL(event.target.files[0])">
 <img id="pImg" style="max-width:100%;border-radius:14px">
 <textarea id="ptTxt" placeholder="Texto del post"></textarea>
 <button class="btn btn-acc" onclick="genP()">Generar vista previa</button>
 <div id="pPrev" class="card"></div>
-<button class="btn btn-sec" onclick="navigator.clipboard.writeText(pPrev.innerText);alert('Copiado ✅')">📋 Copiar todo</button>
-<script>
-function genP(){pPrev.innerText=ptTxt.value+"\n\n#"+Math.random().toString(36).slice(2,7)+" - Post único";}
-</script>
+<button class="btn btn-sec" onclick="navigator.clipboard.writeText(document.getElementById('pPrev').innerText);alert('Copiado ✅')">📋 Copiar todo</button>
 </section>
 
 <section id="marketing">
-<h3>📈 Marketing</h3>
-<div style="display:grid;gap:10px">
-<div class="card"><b>1. Público objetivo</b><br>Definí edad, gustos y dónde está tu cliente.</div>
-<div class="card"><b>2. Propuesta de valor</b><br>Por qué te eligen a vos.</div>
-<div class="card"><b>3. Identidad de marca</b><br>Colores, logo y tono de comunicación.</div>
-<div class="card"><b>4. Contenido 30 días</b><br>Calendario de posteos.</div>
-<div class="card"><b>5. Embudo de ventas</b><br>Atraer → Convertir → Fidelizar.</div>
-<div class="card"><b>6. Publicidad paga</b><br>Ads en IG/FB.</div>
-<div class="card"><b>7. WhatsApp Business</b><br>Catálogo y respuestas rápidas.</div>
-<div class="card"><b>8. Fotografía producto</b><br>Fotos que venden.</div>
-<div class="card"><b>9. Promociones</b><br>Descuentos estratégicos.</div>
-<div class="card"><b>10. Métricas</b><br>Medí alcance y ventas.</div>
-</div>
-<button class="btn" onclick="window.print()">📥 Descargar criterios</button>
-<div id="adminBox" style="display:none;margin-top:12px" class="card">
-<b>Solo emprendedor:</b>
-<input id="ytL" placeholder="Link YouTube">
-<button class="btn" onclick="addY()">Anexar video</button>
-</div>
-<div id="ytLlist"></div>
-<script>
-function addY(){let v=ytL.value;if(!v)return;ytLlist.innerHTML+=`<div class=card><a href="${v}" target="_blank">${v}</a></div>`;document.getElementById('pVidFull').innerHTML+=`<div class=card><a href="${v}" target="_blank">${v}</a></div>`;ytL.value='';}
-</script>
+<h3>📈 Marketing - 10 criterios argumentados</h3>
+<div id="mktList" style="display:grid;gap:10px"></div>
 </section>
 
 <div id="panelPage">
-<div class="panel-header">
-<div><h2 style="margin:0">👤 Panel del Emprendedor</h2><small id="pUserInfo"></small></div>
-<button class="user-panel" onclick="closeFullPanel()">✕ Volver</button>
-</div>
+<div class="panel-header"><div><h2 style="margin:0">👤 Panel del Emprendedor</h2><small id="pUserInfo"></small></div><button class="user-panel" onclick="closeFullPanel()">✕ Volver</button></div>
 <div class="grid">
 <div class="card"><h3>📊 Mi cuenta</h3><div id="panelContent"></div><button class="btn btn-sec" onclick="logout()">Cerrar sesión</button></div>
-<div class="card"><h3>💰 Mis finanzas</h3><div id="pFinanzasFull"></div></div>
-<div class="card"><h3>📦 Mi stock</h3><div id="pStockFull"></div></div>
+<div class="card" onclick="abrirPlanilla('finanzas')" style="cursor:pointer"><h3>💰 Mis finanzas 📊</h3><small>Tocá para ver planilla Excel</small><div id="pFinanzasFull"></div></div>
+<div class="card" onclick="abrirPlanilla('stock')" style="cursor:pointer"><h3>📦 Mi stock 📊</h3><small>Tocá para ver planilla Excel</small><div id="pStockFull"></div></div>
+<div class="card"><h3>🧮 Mis cálculos</h3><div id="pCalcFull"></div></div>
 <div class="card"><h3>🎨 Mis diseños</h3><p>Tus banners y fotos</p></div>
-<div class="card"><h3>🎥 Mis videos</h3><div id="pVidFull"></div></div>
 <div class="card"><h3>📈 Marketing</h3><p>Tu progreso</p></div>
 </div>
 </div>
 
-<div id="loginPanel">
-<div class="login-box">
-<div style="display:flex;gap:8px">
-<button class="btn" style="flex:1" onclick="sw('l')">Login</button>
-<button class="btn btn-sec" style="flex:1" onclick="sw('r')">Registro</button>
-</div>
-<div id="fl"><h3>Entrar</h3><input id="lE" placeholder="Email"><input id="lP" type="password" placeholder="Contraseña"><button class="btn btn-acc" style="width:100%" onclick="login()">Entrar</button></div>
-<div id="fr" style="display:none"><h3>Crear cuenta</h3><input id="rN" placeholder="Nombre"><input id="rE" placeholder="Email"><input id="rP" type="password" placeholder="Contraseña"><button class="btn btn-acc" style="width:100%" onclick="reg()">Registrarme</button></div>
-<p id="aMsg" style="color:red;min-height:20px"></p>
+<div id="planillaModal">
+<div style="background:#fff;border-radius:16px;max-width:900px;margin:auto;padding:20px">
+<div style="display:flex;justify-content:space-between;align-items:center"><h3 id="planillaTitle"></h3><button class="btn btn-sec" onclick="document.getElementById('planillaModal').style.display='none'">✕ Cerrar</button></div>
+<div id="planillaBody"></div>
+<button class="btn btn-acc" onclick="descargarCSV()">📥 Descargar Excel (CSV)</button>
 </div>
 </div>
 
+<div id="loginPanel"><div class="login-box">
+<div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="sw('l')">Login</button><button class="btn btn-sec" style="flex:1" onclick="sw('r')">Registro</button></div>
+<div id="fl"><h3>Entrar</h3><input id="lE" placeholder="Email"><input id="lP" type="password" placeholder="Contraseña"><button class="btn btn-acc" style="width:100%" onclick="login()">Entrar</button></div>
+<div id="fr" style="display:none"><h3>Crear cuenta</h3><input id="rN" placeholder="Nombre"><input id="rE" placeholder="Email"><input id="rP" type="password" placeholder="Contraseña"><button class="btn btn-acc" style="width:100%" onclick="reg()">Registrarme</button></div>
+<p id="aMsg" style="color:red;min-height:20px"></p>
+</div></div>
+
 <script>
-function sw(t){
- document.getElementById('fl').style.display=t=='l'?'block':'none';
- document.getElementById('fr').style.display=t=='r'?'block':'none';
- document.getElementById('aMsg').textContent='';
-}
-function getUsers(){
- return JSON.parse(localStorage.getItem('users_db')||'{}');
-}
-function saveUsers(u){
- localStorage.setItem('users_db',JSON.stringify(u));
-}
-function reg(){
- let n=document.getElementById('rN').value.trim();
- let e=document.getElementById('rE').value.trim().toLowerCase();
- let p=document.getElementById('rP').value;
- let msg=document.getElementById('aMsg');
- if(!n||!e||!p){msg.style.color='red';msg.textContent='Completá nombre, email y contraseña';return;}
- if(!e.includes('@')){msg.textContent='Email inválido';return;}
- let users=getUsers();
- if(users[e]){msg.style.color='red';msg.textContent='Ese email ya está registrado, hacé login';return;}
- users[e]={n:n,e:e,p:p,created:Date.now()};
- saveUsers(users);
- msg.style.color='green';msg.textContent='✅ Registrado! Ahora hacé login';
- setTimeout(()=>sw('l'),800);
-}
-function login(){
- let e=document.getElementById('lE').value.trim().toLowerCase();
- let p=document.getElementById('lP').value;
- let msg=document.getElementById('aMsg');
- let users=getUsers();
- let u=users[e];
- if(!u){msg.style.color='red';msg.textContent='No existe ese email, registrate primero';return;}
- if(u.p!==p){msg.style.color='red';msg.textContent='Contraseña incorrecta';return;}
- localStorage.setItem('sess',e);
- applyUser(u);
-}
-function applyUser(u){
- document.getElementById('loginPanel').style.display='none';
- document.getElementById('userNameTop').textContent=u.n;
- document.getElementById('panelContent').innerHTML=`<div class=card><b>${u.n}</b><br>${u.e}<br><small>Cuenta activa ✅</small></div>`;
- document.getElementById('pUserInfo').textContent=u.n+' • '+u.e;
- document.getElementById('adminBox').style.display='block';
-}
-function requireAuth(){
- if(!localStorage.getItem('sess')){alert('Logeate primero');return false;}
- return true;
-}
+// NAV
+function show(id){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+// AUTH
+function sw(t){document.getElementById('fl').style.display=t=='l'?'block':'none';document.getElementById('fr').style.display=t=='r'?'block':'none';document.getElementById('aMsg').textContent='';}
+function getUsers(){return JSON.parse(localStorage.getItem('users_db')||'{}');}
+function saveUsers(u){localStorage.setItem('users_db',JSON.stringify(u));}
+function reg(){let n=document.getElementById('rN').value.trim(),e=document.getElementById('rE').value.trim().toLowerCase(),p=document.getElementById('rP').value,msg=document.getElementById('aMsg');if(!n||!e||!p){msg.textContent='Completá todo';return;}let users=getUsers();if(users[e]){msg.textContent='Ya existe, hacé login';return;}users[e]={n,e,p};saveUsers(users);msg.style.color='green';msg.textContent='✅ Registrado! Hacé login';setTimeout(()=>sw('l'),700);}
+function login(){let e=document.getElementById('lE').value.trim().toLowerCase(),p=document.getElementById('lP').value,msg=document.getElementById('aMsg'),users=getUsers(),u=users[e];if(!u){msg.textContent='No existe, registrate';return;}if(u.p!==p){msg.textContent='Contraseña incorrecta';return;}localStorage.setItem('sess',e);applyUser(u);}
+function applyUser(u){document.getElementById('loginPanel').style.display='none';document.getElementById('userNameTop').textContent=u.n;document.getElementById('panelContent').innerHTML=`<b>${u.n}</b><br>${u.e}`;document.getElementById('pUserInfo').textContent=u.n+' • '+u.e;}
+function requireAuth(){if(!localStorage.getItem('sess')){alert('Logeate primero');return false;}return true;}
 function logout(){localStorage.removeItem('sess');location.reload();}
-function openFullPanel(){
- if(!localStorage.getItem('sess')){alert('Logeate primero');return;}
- document.getElementById('panelPage').classList.add('active');
- document.body.style.overflow='hidden';
-}
-function closeFullPanel(){
- document.getElementById('panelPage').classList.remove('active');
- document.body.style.overflow='';
-}
-function show(id){
- document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- window.scrollTo(0,0);
-}
-// auto-login
-(function(){
- let s=localStorage.getItem('sess');
- if(!s) return;
- let users=getUsers();
- let u=users[s];
- if(u) applyUser(u);
-})();
+function openFullPanel(){if(!localStorage.getItem('sess')){alert('Logeate primero');return;}document.getElementById('panelPage').classList.add('active');document.body.style.overflow='hidden';}
+function closeFullPanel(){document.getElementById('panelPage').classList.remove('active');document.body.style.overflow='';}
+// CALC -> PANEL
+function calcMargen(){let c=+document.getElementById('cCosto').value||0,v=+document.getElementById('cVenta').value||0,o=+document.getElementById('cOtros').value||0,tc=c+o,g=v-tc,m=v?g/v*100:0;let msg=m<20?"🔴 SUBÍ precio":m<35?"🟡 Margen justo":m<=60?"🟢 Saludable":"🔵 Podés BAJAR";document.getElementById('cRes').innerHTML=`Costo $${tc} Ganancia $${g} Margen ${m.toFixed(1)}%<br>${msg}`;let el=document.createElement('div');el.className='card';el.innerHTML=`🧮 ${new Date().toLocaleDateString()} Costo $${tc} Venta $${v} Gan $${g} (${m.toFixed(1)}%)`;document.getElementById('pCalcFull').appendChild(el);}
+// FINANZAS
+function guardarFin(){if(!requireAuth())return;let b=(+document.getElementById('fIng').value||0)-(+document.getElementById('fEgr').value||0);let el=document.createElement('div');el.className='card';el.dataset.fecha=document.getElementById('fFecha').value;el.dataset.cuenta=document.getElementById('fNombre').value;el.dataset.ing=document.getElementById('fIng').value;el.dataset.egr=document.getElementById('fEgr').value;el.dataset.bal=b;el.dataset.det=document.getElementById('fDet').value;el.innerHTML=`<b>${el.dataset.cuenta}</b> ${el.dataset.fecha} $${b}`;document.getElementById('pFinanzasFull').appendChild(el);alert('Guardado ✅');}
+// DESCRIP
+function genDesc(){let n=document.getElementById('dNom').value||'producto';document.getElementById('dOut').innerHTML=["🔥 OFERTA","✨ NUEVO","💎 PREMIUM"].map((b,i)=>`<div class=card><b>${b}:</b> ${n} #${Math.random().toString(36).slice(2,7)}</div>`).join('');}
+// CONSEJOS
+function sendChat(){let v=document.getElementById('chatIn').value;if(!v)return;let b=document.getElementById('chatBox');b.innerHTML+=`<p><b>Vos:</b>${v}</p><p><b>IA:</b>Enfocate en fotos y precios.</p>`;document.getElementById('chatIn').value='';}
+// STOCK
+let pf=0;function calcD(){let v=+document.getElementById('sMin').value||0,d=+document.getElementById('sDesc').value||0;pf=v-v*d/100;document.getElementById('sDescRes').innerHTML=d?`Con ${d}%: <b>$${pf.toFixed(2)}</b>`:'';}
+function addStock(){let n=document.getElementById('sNom').value,ct=document.getElementById('sCant').value,co=document.getElementById('sCosto').value,ma=document.getElementById('sMay').value,mi=document.getElementById('sMin').value,de=document.getElementById('sDesc').value;document.getElementById('stockTb').innerHTML+=`<tr><td>${n}</td><td>${ct}</td><td>$${co}</td><td>$${ma}</td><td>$${mi}</td><td>${de}%</td><td>$${pf.toFixed(2)}</td></tr>`;let d=document.createElement('div');d.className='card';d.dataset.n=n;d.dataset.c=ct;d.dataset.co=co;d.dataset.ma=ma;d.dataset.mi=mi;d.dataset.de=de;d.dataset.fi=pf.toFixed(2);d.innerHTML=`${n} x${ct} $${pf.toFixed(2)}`;document.getElementById('pStockFull').appendChild(d);}
+// FOTO
+document.getElementById('fUp').onchange=e=>document.getElementById('fPrev').src=URL.createObjectURL(e.target.files[0]);
+['rB','rC','rS'].forEach(id=>document.getElementById(id).oninput=()=>{document.getElementById('fPrev').style.filter=`brightness(${document.getElementById('rB').value}%) contrast(${document.getElementById('rC').value}%) saturate(${document.getElementById('rS').value}%)`;});
+function dlFoto(n){let a=document.createElement('a');a.href=document.getElementById('fPrev').src;a.download=n+'.jpg';a.click();}
+// BANNER
+let hist=[];const bp=document.getElementById('bannerPreview');
+function saveH(){hist.push(bp.innerHTML);if(hist.length>20)hist.shift();}
+function undoB(){if(hist.length)bp.innerHTML=hist.pop();}
+document.getElementById('bUp').onchange=e=>{saveH();let i=document.getElementById('bannerImg');i.src=URL.createObjectURL(e.target.files[0]);i.style.display='block';};
+['#4a90e2','#e94e77','#2ecc71','#f39c12','#9b59b6','#111'].forEach(c=>{let d=document.createElement('div');d.className='color';d.style.background=c;d.onclick=()=>{saveH();bp.style.background=c;};document.getElementById('pal').appendChild(d);});
+["🔥","⭐","❤️","✨","🚀"].forEach(em=>{let b=document.createElement('button');b.textContent=em;b.style.fontSize='24px';b.onclick=()=>{saveH();for(let r=0;r<3;r++){let row=document.createElement('div');row.className='emoji-row';row.style.top=(18+r*28)+'%';row.textContent=(em+' ').repeat(10);bp.appendChild(row);}};document.getElementById('eBtns').appendChild(b);});
+function rb(){document.getElementById('pT').textContent=document.getElementById('bT').value;document.getElementById('pS').textContent=document.getElementById('bS').value;document.getElementById('pI').textContent=document.getElementById('bI').value;document.getElementById('pF').textContent=document.getElementById('bF').value;document.getElementById('pH').textContent=document.getElementById('bH').value;}
+// POST
+function genP(){document.getElementById('pPrev').innerText=document.getElementById('ptTxt').value+"\n\n#"+Math.random().toString(36).slice(2,7);}
+// MARKETING 10 ARGUMENTADOS SIN VIDEO
+const mkts=[
+["1. Público objetivo","Quién es tu cliente ideal: edad, barrio, poder adquisitivo. Sin esto le hablás a todos y no vendés a nadie. Definilo en una frase y todo tu contenido apuntará mejor."],
+["2. Propuesta de valor","Por qué te eligen a vos y no a otro: precio, calidad, rapidez. Tiene que entenderse en 10 segundos. Si no es clara, el cliente se va a la competencia."],
+["3. Identidad de marca","Colores, logo y tono. La gente compra lo que reconoce. Mantené coherencia en fotos y textos para generar confianza."],
+["4. Contenido 30 días","3 posteos por semana: 1 enseña, 1 muestra, 1 vende. La constancia le gana al algoritmo y te mantiene presente."],
+["5. Embudo de ventas","Atraer con contenido, convertir por WhatsApp, fidelizar con seguimiento. Sin embudo se escapan los interesados."],
+["6. Publicidad paga","Con poco presupuesto llegás a miles en tu zona. Empezá con un producto ganador, medí y escalá lo que funciona."],
+["7. WhatsApp Business","Catálogo y respuestas rápidas. El 80% cierra si respondés en 5 minutos. Usá etiquetas para organizar clientes."],
+["8. Fotografía producto","Luz natural, fondo claro, 3 ángulos. Buena foto sube 30% el precio percibido sin cambiar el producto."],
+["9. Promociones","2x1, descuento por cantidad, envío gratis. Poné fecha límite para crear urgencia y mover stock parado."],
+["10. Métricas","Medí alcance, clicks y ventas semanal. Lo que no se mide no mejora. Anotá todo en tu panel."]
+];
+(function(){let ml=document.getElementById('mktList');mkts.forEach((m,i)=>{let d=document.createElement('div');d.className='card';d.innerHTML=`<b>${m[0]}</b><p>${m[1]}</p><button class="btn btn-sec" onclick="descargarCriterio(${i})">📥 Descargar este criterio</button>`;ml.appendChild(d);});})();
+function descargarCriterio(i){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([mkts[i][0]+"\n\n"+mkts[i][1]],{type:'text/plain'}));a.download=mkts[i][0]+'.txt';a.click();}
+// PLANILLA EXCEL
+let planillaActual='';
+function abrirPlanilla(tipo){planillaActual=tipo;document.getElementById('planillaTitle').textContent=tipo=='finanzas'?'💰 Planilla Finanzas':'📦 Planilla Stock';let html='';if(tipo=='finanzas'){html='<table><tr><th>Fecha</th><th>Cuenta</th><th>Ingresos</th><th>Egresos</th><th>Balance</th><th>Detalle</th></tr>';document.querySelectorAll('#pFinanzasFull.card').forEach(c=>{html+=`<tr><td>${c.dataset.fecha||''}</td><td>${c.dataset.cuenta||''}</td><td>${c.dataset.ing||''}</td><td>${c.dataset.egr||''}</td><td>${c.dataset.bal||''}</td><td>${c.dataset.det||''}</td></tr>`;});html+='</table>';}else{html='<table><tr><th>Producto</th><th>Cant</th><th>Costo</th><th>May</th><th>Min</th><th>Desc%</th><th>Final</th></tr>';document.querySelectorAll('#pStockFull.card').forEach(c=>{html+=`<tr><td>${c.dataset.n}</td><td>${c.dataset.c}</td><td>${c.dataset.co}</td><td>${c.dataset.ma}</td><td>${c.dataset.mi}</td><td>${c.dataset.de}</td><td>${c.dataset.fi}</td></tr>`;});html+='</table>';}document.getElementById('planillaBody').innerHTML=html;document.getElementById('planillaModal').style.display='block';}
+function descargarCSV(){let csv='';document.querySelectorAll('#planillaBody table tr').forEach(r=>{csv+=[...r.querySelectorAll('th,td')].map(c=>'"'+c.innerText.replace(/"/g,'""')+'"').join(',')+'\n';});let a=document.createElement('a');a.href=encodeURI('data:text/csv;charset=utf-8,'+csv);a.download=planillaActual+'.csv';a.click();}
+// INIT
+let s=localStorage.getItem('sess');if(s){let u=getUsers()[s];if(u)applyUser(u);}
 </script>
 </body>
-</html
+</html>
