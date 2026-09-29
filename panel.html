@@ -1,62 +1,144 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Panel Admin - Tracking Aura</title>
-<style>body{font-family:Arial;max-width:950px;margin:auto;padding:12px;background:#111;color:#fff}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:9px;border-bottom:1px solid #333;text-align:center}th{background:#2a2a2a;color:#a78bfa}.card{background:#1e1e1e;padding:14px;border-radius:12px;margin:10px 0}.badge{padding:4px 8px;border-radius:20px;font-size:11px;font-weight:800}.ok{background:#dcfce7;color:#166534}.warn{background:#fef9c3;color:#854d0e}.exp{background:#fee2e2;color:#991b1b}.pro{background:#dbeafe;color:#1e40af}button{padding:7px 10px;border:0;border-radius:8px;font-weight:700;cursor:pointer}.ren{background:#22c55e;color:#fff}.del{background:#ef4444;color:#fff}</style>
-</head><body>
-<h2>📊 Panel Tracking Aura</h2>
-<div id="alertBox" style="display:none;background:#22c55e;color:#fff;padding:12px;border-radius:10px;margin:10px 0;font-weight:800">🔔 ¡Nueva intención de pago!</div>
-<div class="card"><div style="display:flex;gap:8px;text-align:center">
-<div style="flex:1;background:#222;padding:10px;border-radius:10px"><small>EN PRUEBA</small><br><b id="k_trial" style="font-size:20px;color:#facc15">0</b></div>
-<div style="flex:1;background:#222;padding:10px;border-radius:10px"><small>QUIERE PAGAR</small><br><b id="k_click" style="font-size:20px;color:#60a5fa">0</b></div>
-<div style="flex:1;background:#222;padding:10px;border-radius:10px"><small>SUSCRIPTOS</small><br><b id="k_pro" style="font-size:20px;color:#4ade80">0</b></div>
-<div style="flex:1;background:#222;padding:10px;border-radius:10px"><small>VENCIDOS</small><br><b id="k_exp" style="font-size:20px;color:#f87171">0</b></div>
-</div></div>
-<div class="card">
-<h3>👥 Usuarias - Día registro / Días restantes / Renovación</h3>
-<button onclick="load()" style="background:#7c3aed;color:#fff;padding:10px;width:100%">🔄 Actualizar ahora</button>
-<table><tr><th>Email / Tel</th><th>Registro</th><th>Estado</th><th>Restan</th><th>Últ. activ</th><th>Herramientas</th><th>Acción</th></tr><tbody id="tb"></tbody></table>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel PRO - Tiempo Real</title>
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif}
+body{margin:0;background:#eef1f6;color:#1f2937;padding:16px}
+.header{background:#111827;color:#fff;padding:18px 22px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;max-width:1100px;margin:0 auto 16px}
+.card{background:#fff;padding:18px;border-radius:16px;margin:12px auto;max-width:1100px;box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.vencido{border-left:6px solid #c62828;background:#ffebee}
+.porpagar{border-left:6px solid #f9a825;background:#fff8e1}
+.ok{border-left:6px solid #2e7d32;background:#e8f5e9}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{padding:10px;border:1px solid #eee;text-align:left;font-size:14px}
+th{background:#f8fafc}
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;color:#fff}
+.b-red{background:#c62828}.b-yellow{background:#f9a825;color:#111}.b-green{background:#2e7d32}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:12px 0}
+.stat{background:#111827;color:#fff;padding:16px;border-radius:12px;text-align:center}
+.stat h2{margin:0;font-size:28px}
+small{color:#6b7280}
+.live{color:#22c55e;font-weight:700}
+.visita{padding:8px;border-bottom:1px solid #eee;font-size:14px}
+.btn{background:#111827;color:#fff;padding:10px 18px;border:0;border-radius:10px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="header">
+<div><h2 style="margin:0">📊 Panel Emprendedor PRO</h2><small id="userInfo" style="color:#9ca3af">Esperando datos del index...</small></div>
+<div style="text-align:right"><span class="live">● EN VIVO</span><br><small id="lastUpdate" style="color:#9ca3af"></small><br><button class="btn" style="margin-top:8px;background:#6c5ce7" onclick="location.reload()">🔄 Actualizar</button></div>
 </div>
-<div class="card"><h3>💬 Chat</h3><div id="chatBox" style="height:200px;overflow:auto;background:#000;padding:10px;border-radius:8px"></div><div style="display:flex;gap:6px;margin-top:8px"><input id="chatIn" placeholder="Responder..." style="flex:1;padding:10px;border-radius:8px;border:0"><button onclick="sendAdmin()" style="background:#7c3aed;color:#fff;padding:10px">Enviar</button></div></div>
-<audio id="ding" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
+
+<div class="card"><h3>📈 Resumen</h3><div class="stats" id="stats"></div></div>
+
+<div class="card">
+<h3>👥 Quién visitó la página y quién se registró</h3>
+<div class="stats">
+<div class="stat"><h2 id="stVisitas">0</h2><div>Visitas totales</div></div>
+<div class="stat" style="background:#6c5ce7"><h2 id="stRegs">0</h2><div>Registrados</div></div>
+<div class="stat" style="background:#2e7d32"><h2 id="stHoy">0</h2><div>Visitas hoy</div></div>
+<div class="stat" style="background:#f9a825;color:#111"><h2 id="stAnon">0</h2><div>Anónimos</div></div>
+</div>
+<h4>Últimas visitas (quién visitó)</h4>
+<div id="visList"><p>Sin datos todavía. Abrí el index.</p></div>
+<h4>Quién se registró</h4>
+<div id="regList"></div>
+</div>
+
+<div class="card">
+<h3>💰 Finanzas - vencidos y quieren pagar</h3>
+<div id="finList"><p>Sin datos.</p></div>
+</div>
+
+<div class="card">
+<h3>📦 Stock</h3>
+<div id="stockList"><p>Sin datos.</p></div>
+</div>
+
+<div class="card">
+<h3>🧮 Cálculos</h3><div id="calcList"><p>-</p></div>
+<h3>🎨 Diseños</h3><div id="disList"><p>-</p></div>
+<h3>✨ Descripciones</h3><div id="descList"><p>-</p></div>
+<h3>📱 Posts</h3><div id="postList"><p>-</p></div>
+<h3>🤖 Consejos</h3><div id="chatList"><p>-</p></div>
+<h3>📈 Marketing guardado</h3><div id="mktList"><p>-</p></div>
+</div>
+
 <script>
-let lastClickCount=0;
-function getU(){return JSON.parse(localStorage.getItem('aura_users')||'[]')}
-function saveU(u){localStorage.setItem('aura_users',JSON.stringify(u))}
-function load(){
- let us=getU(), now=Date.now(), t=0,c=0,p=0,e=0, html='';
- us.forEach(function(u,i){
-  let dias=Math.floor((now-u.inicio)/86400000);
-  let isTrial=u.trial!==false;
-  let total=isTrial?3:30, rest=total-dias;
-  let estado, cls;
-  if(u.pro){estado='SUSCRIPTO PRO';cls='pro';p++;}
-  else if(rest<0){estado='VENCIDO';cls='exp';e++;}
-  else if(u.tools&&u.tools['click_suscribirse']){estado='QUIERE PAGAR';cls='ok';c++;}
-  else if(isTrial){estado='EN PRUEBA 3d';cls='warn';t++;}
-  else{estado='ESPERANDO PAGO';cls='warn';t++;}
-  let last=u.lastActive?new Date(u.lastActive).toLocaleString('es-AR'):'-';
-  let tools='-';
-  if(u.tools){let arr=Object.entries(u.tools).sort(function(a,b){return b[1]-a[1]}).slice(0,3);tools=arr.map(function(x){return x[0].substring(0,14)+' ('+x[1]+')'}).join('<br>');}
-  let fecha=new Date(u.inicio).toLocaleDateString('es-AR');
-  html+='<tr><td><b>'+u.email+'</b><br><small>'+(u.tel||'')+'</small></td><td>'+fecha+'</td><td><span class="badge '+cls+'">'+estado+'</span></td><td>'+rest+'d</td><td><small>'+last+'</small></td><td><small>'+tools+'</small></td><td><button class="ren" onclick="renovar('+i+')">Renovar 30d</button><br><button class="del" style="margin-top:4px" onclick="eliminar('+i+')">x</button></td></tr>';
- });
- document.getElementById('tb').innerHTML=html||'<tr><td colspan=7>Sin usuarias</td></tr>';
- document.getElementById('k_trial').textContent=t;
- document.getElementById('k_click').textContent=c;
- document.getElementById('k_pro').textContent=p;
- document.getElementById('k_exp').textContent=e;
- if(c>lastClickCount && lastClickCount!==0){
-  document.getElementById('alertBox').style.display='block';
-  document.getElementById('ding').play();
-  setTimeout(function(){document.getElementById('alertBox').style.display='none'},5000);
- }
- lastClickCount=c;
- loadChat();
+function esVencido(fechaStr){
+  if(!fechaStr) return false;
+  let hoy=new Date(); hoy.setHours(0,0,0,0);
+  let f=new Date(fechaStr+'T00:00:00');
+  return f < hoy;
 }
-function renovar(i){let u=getU();u[i].trial=false;u[i].pro=true;u[i].inicio=Date.now();saveU(u);load();alert('✅ '+u[i].email+' ahora es PRO 30 días');}
-function eliminar(i){if(!confirm('Eliminar?'))return;let u=getU();u.splice(i,1);saveU(u);load();}
-function loadChat(){let ch=JSON.parse(localStorage.getItem('chats')||'[]');document.getElementById('chatBox').innerHTML=ch.map(function(m){return '<p><b>'+m.de+':</b> '+m.txt+'</p>'}).join('');}
-function sendAdmin(){let ch=JSON.parse(localStorage.getItem('chats')||'[]');let v=document.getElementById('chatIn').value;if(!v)return;ch.push({de:'admin',txt:v});localStorage.setItem('chats',JSON.stringify(ch));document.getElementById('chatIn').value='';loadChat();}
-load();setInterval(load,4000);
-</script></body></html>
+function renderVisitas(){
+  let visitas=[]; let users={};
+  try{visitas=JSON.parse(localStorage.getItem('emp_visitas')||'[]');}catch(e){}
+  try{users=JSON.parse(localStorage.getItem('users_db')||'{}');}catch(e){}
+  let hoyStr=new Date().toDateString();
+  let hoyCount=visitas.filter(v=>new Date(v.fecha).toDateString()===hoyStr).length;
+  let anon=visitas.filter(v=>v.user==='anonimo').length;
+  document.getElementById('stVisitas').textContent=visitas.length;
+  document.getElementById('stRegs').textContent=Object.keys(users).length;
+  document.getElementById('stHoy').textContent=hoyCount;
+  document.getElementById('stAnon').textContent=anon;
+  document.getElementById('visList').innerHTML=visitas.slice(-30).reverse().map(v=>{
+    let esAnon=v.user==='anonimo';
+    return '<div class="visita '+(esAnon?'porpagar':'ok')+'"><b>'+v.user+'</b> - '+new Date(v.fecha).toLocaleString()+(esAnon?' <span class="badge b-yellow">VISITA SIN REGISTRO</span>':' <span class="badge b-green">VISITA</span>')+'</div>';
+  }).join('')||'<p>Sin visitas</p>';
+  document.getElementById('regList').innerHTML=Object.values(users).map(u=>{
+    return '<div class="card ok"><b>'+u.n+'</b> ('+u.e+')<br>'+
+    '<small>📅 Se registró: '+(u.fechaRegistro?new Date(u.fechaRegistro).toLocaleString():new Date(u.created).toLocaleString())+'</small><br>'+
+    '<small>👁️ Visitas: '+(u.visitas||0)+' - Última visita: '+(u.ultimaVisita?new Date(u.ultimaVisita).toLocaleString():'nunca')+'</small><br>'+
+    '<span class="badge b-green">REGISTRADO</span></div>';
+  }).join('')||'<p>Nadie se registró todavía</p>';
+}
+function renderPanel(payload){
+  renderVisitas();
+  if(!payload) return;
+  if(payload.user) document.getElementById('userInfo').textContent='Usuario activo: '+payload.user;
+  if(payload.at) document.getElementById('lastUpdate').textContent='Actualizado '+new Date(payload.at).toLocaleTimeString();
+  let d=payload.data||{finanzas:[],stock:[],calc:[],disenos:[],descrip:[],post:[],chat:[],mkt:[]};
+  let fin=d.finanzas||[]; let stock=d.stock||[];
+  let vencFin=fin.filter(f=>f.bal<0||esVencido(f.fecha)).length;
+  let qpFin=fin.filter(f=>f.bal===0).length;
+  let sinStock=stock.filter(s=>parseInt(s.c)===0).length;
+  document.getElementById('stats').innerHTML=
+    '<div class="stat"><h2>'+fin.length+'</h2><div>Finanzas</div></div>'+
+    '<div class="stat" style="background:#c62828"><h2>'+vencFin+'</h2><div>Vencidos</div></div>'+
+    '<div class="stat" style="background:#f9a825;color:#111"><h2>'+qpFin+'</h2><div>Quieren pagar</div></div>'+
+    '<div class="stat"><h2>'+stock.length+'</h2><div>Stock items</div></div>'+
+    '<div class="stat" style="background:#c62828"><h2>'+sinStock+'</h2><div>Sin stock</div></div>'+
+    '<div class="stat" style="background:#6c5ce7"><h2>'+(d.calc||[]).length+'</h2><div>Cálculos</div></div>';
+  document.getElementById('finList').innerHTML=fin.length?'<table><tr><th>Fecha</th><th>Cuenta</th><th>Ing</th><th>Egr</th><th>Bal</th><th>Estado</th><th>Detalle</th></tr>'+
+    fin.slice().reverse().map(f=>{
+      let venc=f.bal<0||esVencido(f.fecha);
+      let qp=!venc&&f.bal===0;
+      let badge=venc?'<span class="badge b-red">VENCIDO</span>':qp?'<span class="badge b-yellow">QUIERE PAGAR</span>':'<span class="badge b-green">OK</span>';
+      let cls=venc?'vencido':qp?'porpagar':'ok';
+      return '<tr class="'+cls+'"><td>'+(f.fecha||'-')+'</td><td>'+(f.cuenta||'-')+'</td><td>'+f.ing+'</td><td>'+f.egr+'</td><td><b>$'+f.bal+'</b></td><td>'+badge+'</td><td>'+(f.det||'-')+'</td></tr>';
+    }).join('')+'</table>':'<p>Sin finanzas</p>';
+  document.getElementById('stockList').innerHTML=stock.length?stock.slice().reverse().map(s=>{
+    let sin=parseInt(s.c)===0;
+    return '<div class="card '+(sin?'vencido':'ok')+'">📦 <b>'+s.n+'</b> x'+s.c+' - $'+(s.fi||'-')+' '+(sin?'<span class="badge b-red">SIN STOCK - VENCIDO</span>':'<span class="badge b-green">EN STOCK</span>')+'</div>';
+  }).join(''):'<p>Sin stock</p>';
+  document.getElementById('calcList').innerHTML=(d.calc||[]).map(c=>'<div class="card ok">'+c+'</div>').join('')||'<p>-</p>';
+  document.getElementById('disList').innerHTML=(d.disenos||[]).map(c=>'<div class="card">'+c+'</div>').join('')||'<p>-</p>';
+  document.getElementById('descList').innerHTML=(d.descrip||[]).map(c=>'<div class="card">'+c+'</div>').join('')||'<p>-</p>';
+  document.getElementById('postList').innerHTML=(d.post||[]).map(c=>'<div class="card">'+c+'</div>').join('')||'<p>-</p>';
+  document.getElementById('chatList').innerHTML=(d.chat||[]).map(c=>'<div class="card">'+c+'</div>').join('')||'<p>-</p>';
+  document.getElementById('mktList').innerHTML=(d.mkt||[]).map(c=>'<div class="card">'+c+'</div>').join('')||'<p>-</p>';
+}
+window.addEventListener('storage',e=>{
+  if(e.key==='emp_panel_sync'&&e.newValue){try{renderPanel(JSON.parse(e.newValue));}catch(err){}}
+  if(e.key==='emp_visitas'||e.key==='users_db'){renderVisitas();}
+});
+let init=localStorage.getItem('emp_panel_sync');
+if(init){try{renderPanel(JSON.parse(init));}catch(e){renderVisitas();}}else{renderVisitas();}
+setInterval(()=>{let v=localStorage.getItem('emp_panel_sync'); if(v){try{renderPanel(JSON.parse(v));}catch(e){}} else{renderVisitas();}},2000);
+</script>
+</body>
+</html>
