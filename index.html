@@ -2,49 +2,60 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Emprendedor PRO Completo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emprendedor PRO - Tu negocio completo</title>
 <style>
 :root{--bg:#f4f6fb;--card:#fff;--dark:#111827;--acc:#6c5ce7;--mut:#6b7280}
 *{box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif}
 body{margin:0;background:var(--bg);color:#1f2937}
 .topbar{background:var(--dark);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:30}
 .user-panel{background:#fff;color:#111;border:0;padding:10px 18px;border-radius:25px;font-weight:700;cursor:pointer}
-nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;background:#1f2937;padding:12px;position:sticky;top:58px;z-index:20}
-nav button{background:#374151;color:#fff;border:0;padding:10px 16px;border-radius:20px;cursor:pointer}
+nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;background:#1f2937;padding:12px;position:sticky;top:57px;z-index:20}
+nav button{background:#374151;color:#fff;border:0;padding:10px 16px;border-radius:20px;cursor:pointer;font-size:14px}
 nav button:hover{background:var(--acc)}
 section{display:none;max-width:1020px;margin:18px auto;background:var(--card);padding:26px;border-radius:20px;box-shadow:0 4px 24px rgba(0,0,0,.07)}
 section.active{display:block}
+h3{margin-top:0}
 input,textarea,select{width:100%;padding:12px;margin:8px 0;border:1px solid #e5e7eb;border-radius:12px;font-size:15px}
 label{font-weight:600;font-size:13px;color:var(--mut)}
 .btn{background:var(--dark);color:#fff;padding:12px 20px;border:0;border-radius:12px;margin:8px 6px 0 0;cursor:pointer;font-weight:600}
-.btn-acc{background:var(--acc)}.btn-sec{background:#eef0f4;color:#111}
+.btn-acc{background:var(--acc)}
+.btn-sec{background:#eef0f4;color:#111}
 .card{background:#f8fafc;padding:14px;border-radius:14px;margin:10px 0;border:1px solid #eef2f7}
 table{width:100%;border-collapse:collapse;margin-top:12px}
-th,td{border:1px solid #e5e7eb;padding:10px;font-size:14px;text-align:left}th{background:#f8fafc}
-#loginPanel{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+th,td{border:1px solid #eef0f4;padding:10px;font-size:14px;text-align:left}
+th{background:#f8fafc}
+#loginPanel{position:fixed;inset:0;background:rgba(10,10,15,.85);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
 .login-box{background:#fff;padding:32px;border-radius:24px;width:100%;max-width:420px}
 #bannerPreview{width:100%;height:360px;position:relative;overflow:hidden;border-radius:18px;display:flex;justify-content:center;align-items:center;color:#fff;background:linear-gradient(135deg,#4a90e2,#9b59b6);margin-top:12px}
-#bannerImg{max-height:62%;max-width:55%;object-fit:contain;z-index:2;border-radius:12px;position:relative}
+#bannerImg{max-height:62%;max-width:55%;object-fit:contain;z-index:2;border-radius:12px;position:relative;box-shadow:0 6px 20px rgba(0,0,0,.35)}
 .emoji-row{position:absolute;width:100%;display:flex;justify-content:space-around;opacity:.5;font-size:30px;pointer-events:none;z-index:1}
-.banner-text{position:absolute;z-index:3;text-align:center;text-shadow:0 2px 10px rgba(0,0,0,.6)}
-.small-social{position:absolute;bottom:12px;z-index:4;display:flex;gap:10px;background:rgba(0,0,0,.6);padding:8px 14px;border-radius:20px;font-size:12px}
-.palette{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.color{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid #eee}
+.banner-text{position:absolute;z-index:3;text-align:center;padding:12px;text-shadow:0 2px 10px rgba(0,0,0,.6);max-width:90%}
+.small-social{position:absolute;bottom:12px;z-index:4;display:flex;gap:12px;background:rgba(0,0,0,.6);padding:8px 16px;border-radius:20px;font-size:12px}
+.palette{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.color{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid #e5e7eb}
 #panelPage{display:none;position:fixed;inset:0;background:#eef1f6;z-index:60;overflow:auto}
 #panelPage.active{display:block}
-.panel-header{background:#111827;color:#fff;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0}
+.panel-header{background:#111827;color:#fff;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px;padding:22px;max-width:1240px;margin:auto}
-.clickable{cursor:pointer}.clickable:hover{outline:2px solid var(--acc)}
+.clickable{cursor:pointer;transition:.2s}
+.clickable:hover{outline:2px solid var(--acc);transform:translateY(-2px)}
 #planillaModal{display:none;position:fixed;inset:0;background:#eef1f6;z-index:200;overflow:auto}
 #planillaModal.active{display:block}
-.planilla-header{background:#111827;color:#fff;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0}
+.planilla-header{background:#111827;color:#fff;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
 .planilla-body{max-width:1000px;margin:18px auto;background:#fff;padding:22px;border-radius:18px}
-#fixedPanelBtn{position:fixed;bottom:22px;right:22px;z-index:90;background:#111827;color:#fff;border:0;border-radius:50px;padding:16px 24px;font-weight:700;display:none;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#fixedPanelBtn{position:fixed;bottom:22px;right:22px;z-index:90;background:#111827;color:#fff;border:0;border-radius:50px;padding:16px 24px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.35);cursor:pointer;display:none}
 .welcome-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center;padding:20px}
+.welcome-card{padding:36px 28px;border-radius:26px;max-width:440px;text-align:center;position:relative;width:100%}
 </style>
 </head>
 <body>
-<div class="topbar"><div>🚀 <b>Emprendedor PRO</b></div><button class="user-panel" onclick="openFullPanel()">👤 <span id="userNameTop">Entrar</span> →</button></div>
+
+<div class="topbar">
+<div>🚀 <b>Emprendedor PRO</b></div>
+<button class="user-panel" onclick="openFullPanel()">👤 <span id="userNameTop">Entrar</span> →</button>
+</div>
+
 <nav>
 <button onclick="show('calc')">🧮 Calculadora</button>
 <button onclick="show('finanzas')">💰 Finanzas</button>
@@ -57,245 +68,448 @@ th,td{border:1px solid #e5e7eb;padding:10px;font-size:14px;text-align:left}th{ba
 <button onclick="show('marketing')">📈 Marketing</button>
 </nav>
 
+<!-- CALCULADORA -->
 <section id="calc" class="active">
-<h3>🧮 Calculadora de margen real</h3>
-<label>Costo producto</label><input id="cCosto" type="number" placeholder="1000">
-<label>Precio venta</label><input id="cVenta" type="number" placeholder="1800">
-<label>Otros gastos</label><input id="cOtros" type="number" placeholder="200">
-<button class="btn btn-acc" onclick="calcMargen()">Calcular y guardar</button>
-<div id="cRes" class="card">Te digo si tu margen es bajo, justo o saludable.</div>
+<h3>🧮 Calculadora de margen</h3>
+<label>Costo del producto ($)</label>
+<input id="cCosto" type="number" placeholder="Ej: 1000">
+<label>Precio de venta ($)</label>
+<input id="cVenta" type="number" placeholder="Ej: 1800">
+<label>Otros gastos (envío, packaging)</label>
+<input id="cOtros" type="number" placeholder="Ej: 200">
+<button class="btn btn-acc" onclick="calcMargen()">Calcular y guardar en panel</button>
+<div id="cRes" class="card">Ingresá los valores para calcular tu margen real.</div>
 </section>
 
+<!-- FINANZAS -->
 <section id="finanzas">
-<h3>💰 Finanzas</h3>
+<h3>💰 Control de finanzas</h3>
 <label>Fecha</label><input type="date" id="fFecha">
-<label>Cuenta / Mes</label><input id="fNombre" placeholder="Ej: Febrero">
-<label>Ingresos</label><input id="fIng" type="number">
-<label>Egresos</label><input id="fEgr" type="number">
-<label>Detalle</label><input id="fDet" placeholder="Ej: feria">
-<button class="btn btn-acc" onclick="guardarFin()">💾 Guardar en panel</button>
+<label>Nombre de la cuenta / mes</label><input id="fNombre" placeholder="Ej: Febrero, Mercado Pago">
+<label>Ingresos totales</label><input id="fIng" type="number" placeholder="0">
+<label>Egresos totales</label><input id="fEgr" type="number" placeholder="0">
+<label>Detalle</label><input id="fDet" placeholder="Ej: ventas feria">
+<button class="btn btn-acc" onclick="guardarFin()">💾 Guardar en mi panel</button>
 </section>
 
+<!-- DESCRIPCION -->
 <section id="descrip">
-<h3>✨ Descripción vendedora</h3>
-<input type="file" accept="image/*">
-<label>Producto</label><input id="dNom" placeholder="Ej: Zapatillas">
+<h3>✨ Generador de descripciones</h3>
+<label>Foto del producto (opcional)</label><input type="file" accept="image/*">
+<label>Nombre del producto</label><input id="dNom" placeholder="Ej: Zapatillas Urbanas">
 <label>Marca</label><input id="dMar" placeholder="Ej: Nike">
-<label>Datos extra</label><textarea id="dDat" placeholder="Talles, colores..."></textarea>
-<button class="btn btn-acc" onclick="genDesc()">Generar 3 versiones</button>
-<button class="btn btn-sec" onclick="buscarML()">Buscar en ML</button>
+<label>Datos extra</label><textarea id="dDat" placeholder="Colores, talles, materiales..."></textarea>
+<button class="btn btn-acc" onclick="genDesc()">Generar 3 versiones y guardar</button>
+<button class="btn btn-sec" onclick="buscarML()">🔍 Buscar en Mercado Libre</button>
 <div id="dOut"></div>
 </section>
 
+<!-- CONSEJOS -->
 <section id="consejos">
-<h3>🤖 Consejos IA</h3>
+<h3>🤖 Asistente de consejos</h3>
 <div id="chatBox" class="card" style="height:240px;overflow:auto"></div>
-<input id="chatIn" placeholder="¿Cómo pongo precios?">
+<input id="chatIn" placeholder="Ej: ¿Cómo pongo precio a mis tortas?">
 <button class="btn btn-acc" onclick="sendChat()">Enviar y guardar</button>
 </section>
 
+<!-- STOCK -->
 <section id="stock">
-<h3>📦 Stock completo</h3>
+<h3>📦 Gestión de stock</h3>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
 <input id="sNom" placeholder="Producto" style="grid-column:1/3">
 <input id="sCant" type="number" placeholder="Cantidad">
-<input id="sCosto" type="number" placeholder="Costo">
-<input id="sMay" type="number" placeholder="Mayorista">
-<input id="sMin" type="number" placeholder="Minorista" oninput="calcD()">
-<input id="sDesc" type="number" placeholder="Descuento %" oninput="calcD()">
-<div id="sDescRes" class="card" style="grid-column:1/3">Precio final con descuento</div>
+<input id="sCosto" type="number" placeholder="Costo unitario">
+<input id="sMay" type="number" placeholder="Precio mayorista">
+<input id="sMin" type="number" placeholder="Precio minorista" oninput="calcD()">
+<input id="sDesc" type="number" placeholder="Descuento % promo" oninput="calcD()">
+<div id="sDescRes" class="card" style="grid-column:1/3">Precio con descuento aparecerá aquí</div>
 </div>
-<button class="btn btn-acc" onclick="addStock()">Agregar y guardar</button>
-<table><thead><tr><th>Prod</th><th>Cant</th><th>Costo</th><th>May</th><th>Min</th><th>%</th><th>Final</th></tr></thead><tbody id="stockTb"></tbody></table>
+<button class="btn btn-acc" onclick="addStock()">➕ Agregar al stock y al panel</button>
+<table><thead><tr><th>Prod</th><th>Cant</th><th>Costo</th><th>May</th><th>Min</th><th>Desc%</th><th>Final</th></tr></thead><tbody id="stockTb"></tbody></table>
 </section>
 
+<!-- FOTO PRO -->
 <section id="fotopro">
-<h3>📸 Foto Pro</h3>
+<h3>📸 Foto Pro para redes</h3>
 <input type="file" id="fUp" accept="image/*">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0">
 <div><label>Brillo</label><input type="range" id="rB" min="0" max="200" value="100"></div>
 <div><label>Contraste</label><input type="range" id="rC" min="0" max="200" value="100"></div>
 <div><label>Saturación</label><input type="range" id="rS" min="0" max="200" value="100"></div>
 <div><label>Calidez</label><input type="range" id="rW" min="0" max="200" value="100"></div>
 </div>
-<img id="fPrev" style="max-width:100%;border-radius:16px"><br>
-<button class="btn" onclick="dlFoto('historia')">Historia</button>
-<button class="btn" onclick="dlFoto('post')">Post</button>
-<button class="btn btn-acc" onclick="saveFoto()">💾 Guardar</button>
+<img id="fPrev" style="max-width:100%;border-radius:16px;display:block;margin:auto">
+<br>
+<button class="btn" onclick="dlFoto('historia')">📥 Historia IG/FB</button>
+<button class="btn" onclick="dlFoto('post')">📥 Post IG/FB</button>
+<button class="btn btn-acc" onclick="saveFoto()">💾 Guardar en panel</button>
 </section>
 
+<!-- BANNER -->
 <section id="banner">
-<h3>🎨 Banner Canva Pro</h3>
-<input type="file" id="bUp" accept="image/*">
-<div class="palette" id="pal"></div>
-<div id="eBtns"></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-<input id="bT" placeholder="Título" oninput="rb()">
+<h3>🎨 Creador de Banner estilo Canva</h3>
+<label>Subí tu foto de producto</label><input type="file" id="bUp" accept="image/*">
+<label>Color de fondo</label><div class="palette" id="pal"></div>
+<label>Emojis decorativos</label><div id="eBtns" style="margin:8px 0"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<input id="bT" placeholder="Título grande" oninput="rb()">
 <input id="bS" placeholder="Subtítulo" oninput="rb()">
-<input id="bI" placeholder="Instagram" oninput="rb()">
-<input id="bF" placeholder="Facebook" oninput="rb()">
+<input id="bI" placeholder="Instagram @..." oninput="rb()">
+<input id="bF" placeholder="Facebook..." oninput="rb()">
 <input id="bH" placeholder="#hashtag" oninput="rb()" style="grid-column:1/3">
 </div>
-<div id="bannerPreview"><img id="bannerImg" style="display:none"><div class="banner-text"><h2 id="pT" style="margin:0;font-size:32px"></h2><p id="pS"></p></div><div class="small-social"><span id="pI"></span><span id="pF"></span><span id="pH"></span></div></div>
-<button class="btn btn-sec" onclick="undoB()">↩ Deshacer</button>
-<button class="btn btn-acc" onclick="saveBanner()">💾 Guardar</button>
+<div id="bannerPreview">
+<img id="bannerImg" style="display:none">
+<div class="banner-text"><h2 id="pT" style="margin:0;font-size:34px"></h2><p id="pS" style="font-size:18px"></p></div>
+<div class="small-social"><span id="pI"></span><span id="pF"></span><span id="pH"></span></div>
+</div>
+<button class="btn btn-sec" onclick="undoB()">↩ Deshacer último cambio</button>
+<button class="btn" onclick="alert('En la versión final esto descarga el PNG del banner')">📥 Descargar PNG</button>
+<button class="btn btn-acc" onclick="saveBanner()">💾 Guardar en panel</button>
 </section>
 
+<!-- POST -->
 <section id="post">
-<h3>📱 Post redes</h3>
+<h3>📱 Generador de Post</h3>
 <input type="file" accept="image/*" onchange="document.getElementById('pImg').src=URL.createObjectURL(event.target.files[0])">
-<img id="pImg" style="max-width:100%;border-radius:14px">
-<textarea id="ptTxt" rows="4" placeholder="Texto del post"></textarea>
-<button class="btn btn-acc" onclick="genP()">Generar y guardar</button>
+<img id="pImg" style="max-width:100%;border-radius:14px;margin:10px 0">
+<textarea id="ptTxt" rows="4" placeholder="Escribí el texto de tu post..."></textarea>
+<button class="btn btn-acc" onclick="genP()">✨ Generar vista previa y guardar</button>
 <div id="pPrev" class="card"></div>
-<button class="btn btn-sec" onclick="navigator.clipboard.writeText(document.getElementById('ptTxt').value)">📋 Copiar</button>
+<button class="btn btn-sec" onclick="copiarPost()">📋 Copiar texto</button>
 </section>
 
-<section id="marketing"><h3>📈 Marketing 10 criterios argumentados</h3><div id="mktList" style="display:grid;gap:12px"></div></section>
+<!-- MARKETING -->
+<section id="marketing">
+<h3>📈 Marketing - 10 criterios argumentados para vender más</h3>
+<p style="color:#6b7280">Cada criterio tiene su explicación profunda y botón para descargar.</p>
+<div id="mktList" style="display:grid;gap:12px"></div>
+</section>
 
+<!-- PANEL FULL -->
 <div id="panelPage">
-<div class="panel-header"><div><h2 style="margin:0">👤 Panel del Emprendedor</h2><small id="pUserInfo"></small></div><button class="user-panel" onclick="closeFullPanel()">✕ Volver</button></div>
+<div class="panel-header">
+<div><h2 style="margin:0">👤 Panel del Emprendedor</h2><small id="pUserInfo"></small></div>
+<button class="user-panel" onclick="closeFullPanel()">✕ Volver a la app</button>
+</div>
 <div class="grid">
 <div class="card"><h3>📊 Mi cuenta</h3><div id="panelContent"></div><button class="btn btn-sec" onclick="logout()">Cerrar sesión</button></div>
-<div class="card clickable" onclick="abrirPlanilla('finanzas')"><h3>💰 Mis finanzas 📊</h3><small>Tocá para planilla completa</small><div id="pFinanzasFull"></div></div>
-<div class="card clickable" onclick="abrirPlanilla('stock')"><h3>📦 Mi stock 📊</h3><div id="pStockFull"></div></div>
+<div class="card clickable" onclick="abrirPlanilla('finanzas')"><h3>💰 Mis finanzas 📊</h3><small>Tocá para ver planilla completa</small><div id="pFinanzasFull"></div></div>
+<div class="card clickable" onclick="abrirPlanilla('stock')"><h3>📦 Mi stock 📊</h3><small>Tocá para ver planilla</small><div id="pStockFull"></div></div>
 <div class="card clickable" onclick="abrirPlanilla('calc')"><h3>🧮 Mis cálculos</h3><div id="pCalcFull"></div></div>
 <div class="card clickable" onclick="abrirPlanilla('disenos')"><h3>🎨 Mis diseños</h3><div id="pDisenosFull"></div></div>
-<div class="card clickable" onclick="abrirPlanilla('marketing')"><h3>📈 Mi marketing</h3><div id="pMktFull"></div></div>
+<div class="card clickable" onclick="abrirPlanilla('marketing')"><h3>📈 Mi marketing guardado</h3><div id="pMktFull"></div></div>
 <div class="card"><h3>✨ Mis descripciones</h3><div id="pDescFull"></div></div>
 <div class="card"><h3>📱 Mis posts</h3><div id="pPostFull"></div></div>
 <div class="card"><h3>🤖 Mis consejos</h3><div id="pChatFull"></div></div>
 </div>
 </div>
 
+<!-- MODAL PLANILLA FULLSCREEN -->
 <div id="planillaModal">
-<div class="planilla-header"><h2 id="planillaTitle" style="margin:0">Planilla</h2><button class="user-panel" onclick="cerrarPlanilla()">✕ Volver al panel</button></div>
-<div class="planilla-body"><div id="planillaBody"></div><br><button class="btn btn-acc" onclick="descargarCSV()">📥 Descargar Excel (CSV)</button></div>
+<div class="planilla-header">
+<h3 id="planillaTitle" style="margin:0;color:#fff">Planilla</h3>
+<button class="user-panel" onclick="cerrarPlanilla()">✕ Volver al panel</button>
+</div>
+<div class="planilla-body">
+<div id="planillaBody"></div>
+<button class="btn btn-acc" onclick="descargarCSV()">📥 Descargar Excel (CSV)</button>
+</div>
 </div>
 
+<!-- LOGIN -->
 <div id="loginPanel"><div class="login-box">
-<div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="sw('l')">Login</button><button class="btn btn-sec" style="flex:1" onclick="sw('r')">Registro</button></div>
-<div id="fl"><h3>Entrar</h3><input id="lE" placeholder="Email"><input id="lP" type="password" placeholder="Contraseña"><button class="btn btn-acc" style="width:100%" onclick="login()">Entrar</button></div>
-<div id="fr" style="display:none"><h3>Crear cuenta</h3><input id="rN" placeholder="Nombre"><input id="rE" placeholder="Email"><input id="rP" type="password" placeholder="Contraseña"><button class="btn btn-acc" style="width:100%" onclick="reg()">Registrarme</button></div>
-<p id="aMsg" style="color:red"></p></div></div>
+<div style="display:flex;gap:8px;margin-bottom:12px">
+<button class="btn" style="flex:1" onclick="sw('l')">Login</button>
+<button class="btn btn-sec" style="flex:1" onclick="sw('r')">Registro</button>
+</div>
+<div id="fl"><h3>Bienvenido</h3><input id="lE" placeholder="Email"><input id="lP" type="password" placeholder="Contraseña"><button class="btn btn-acc" style="width:100%" onclick="login()">Entrar →</button></div>
+<div id="fr" style="display:none"><h3>Crear cuenta</h3><input id="rN" placeholder="Tu nombre"><input id="rE" placeholder="Email"><input id="rP" type="password" placeholder="Contraseña"><button class="btn btn-acc" style="width:100%" onclick="reg()">Registrarme gratis</button></div>
+<p id="aMsg" style="color:red"></p>
+</div></div>
 
-<div id="welcomeLogin" class="welcome-overlay"><div style="background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff;padding:35px;border-radius:24px;max-width:420px;text-align:center;position:relative"><button onclick="document.getElementById('welcomeLogin').style.display='none'" style="position:absolute;top:12px;right:12px;background:#fff;border:0;border-radius:50%;width:32px;height:32px">✕</button><div style="font-size:48px">🎉</div><h2>¡Bienvenido de nuevo!</h2><p><b>5 días GRATIS</b><br>Después $4.500/mes</p><button class="btn" style="background:#fff;color:#6c5ce7;width:100%" onclick="document.getElementById('welcomeLogin').style.display='none';openFullPanel()">Ir a mi panel →</button></div></div>
+<!-- BANNER BIENVENIDA LOGIN -->
+<div id="welcomeLogin" class="welcome-overlay">
+<div class="welcome-card" style="background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff">
+<button onclick="document.getElementById('welcomeLogin').style.display='none'" style="position:absolute;top:14px;right:14px;background:#fff;border:0;border-radius:50%;width:34px;height:34px;cursor:pointer">✕</button>
+<div style="font-size:52px">🎉</div>
+<h2>¡Bienvenido de nuevo!</h2>
+<p>Nos alegra verte.<br><b>Tenés 5 días GRATIS</b><br>Después solo $4.500/mes</p>
+<p style="font-size:13px;opacity:.9">Todo tu panel sigue guardado como lo dejaste.</p>
+<button class="btn" style="background:#fff;color:#6c5ce7;width:100%;margin-top:10px" onclick="document.getElementById('welcomeLogin').style.display='none';openFullPanel()">Ir a mi panel →</button>
+</div>
+</div>
 
-<div id="welcomeReg" class="welcome-overlay"><div style="background:#fff;padding:30px;border-radius:24px;max-width:440px;position:relative"><button onclick="document.getElementById('welcomeReg').style.display='none'" style="position:absolute;top:12px;right:12px;background:#eee;border:0;border-radius:50%;width:32px;height:32px">✕</button><div style="font-size:40px;text-align:center">🚀</div><h2 style="text-align:center">¡Cuenta creada!</h2><p style="text-align:center"><b>5 días GRATIS</b> después $4.500/mes</p><div style="font-size:14px;line-height:1.9;background:#f8fafc;padding:14px;border-radius:12px">🧮 Calculadora de margen<br>💰 Finanzas<br>📦 Stock<br>📸 Foto Pro<br>🎨 Banner<br>📈 Marketing 10 pasos<br>👤 Todo se guarda solo</div><button class="btn btn-acc" style="width:100%;margin-top:12px" onclick="document.getElementById('welcomeReg').style.display='none'">Empezar →</button></div></div>
+<!-- BANNER BIENVENIDA REGISTRO -->
+<div id="welcomeReg" class="welcome-overlay">
+<div class="welcome-card" style="background:#fff;color:#1f2937;text-align:left">
+<button onclick="document.getElementById('welcomeReg').style.display='none'" style="position:absolute;top:14px;right:14px;background:#f3f4f6;border:0;border-radius:50%;width:34px;height:34px;cursor:pointer">✕</button>
+<div style="font-size:44px;text-align:center">🚀</div>
+<h2 style="text-align:center">¡Cuenta creada con éxito!</h2>
+<p style="text-align:center"><b>5 días GRATIS</b>, después $4.500/mes. Sin tarjeta.</p>
+<div style="font-size:14px;line-height:2;background:#f8fafc;padding:16px;border-radius:14px">
+🧮 <b>Calculadora:</b> descubrí tu margen real de ganancia<br>
+💰 <b>Finanzas:</b> controlá ingresos y egresos por mes<br>
+📦 <b>Stock:</b> productos, costos y precios con descuento<br>
+📸 <b>Foto Pro:</b> mejorá tus fotos para Instagram<br>
+🎨 <b>Banner:</b> creá flyers profesionales<br>
+📈 <b>Marketing:</b> 10 criterios para vender más<br>
+👤 <b>Panel:</b> todo se guarda automático
+</div>
+<button class="btn btn-acc" style="width:100%;margin-top:14px" onclick="document.getElementById('welcomeReg').style.display='none';sw('l')">Empezar ahora →</button>
+</div>
+</div>
 
 <button id="fixedPanelBtn" onclick="openFullPanel()">👤 Mi Panel</button>
 
 <script>
-function show(id){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
-function sw(t){document.getElementById('fl').style.display=t=='l'?'block':'none';document.getElementById('fr').style.display=t=='r'?'block':'none';}
+// NAVEGACION
+function show(id){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function sw(t){document.getElementById('fl').style.display=t=='l'?'block':'none';document.getElementById('fr').style.display=t=='r'?'block':'none';document.getElementById('aMsg').textContent='';}
+
+// USUARIOS + PERSISTENCIA
 function getUsers(){return JSON.parse(localStorage.getItem('users_db')||'{}');}
 function saveUsers(u){localStorage.setItem('users_db',JSON.stringify(u));}
 function dkey(){return 'emp_data_'+localStorage.getItem('sess');}
-function getData(){try{return JSON.parse(localStorage.getItem(dkey()))||{finanzas:[],stock:[],calc:[],disenos:[],descrip:[],post:[],chat:[],mkt:[]}}catch(e){return {finanzas:[],stock:[],calc:[],disenos:[],descrip:[],post:[],chat:[],mkt:[]}}}
-function saveData(d){localStorage.setItem(dkey(),JSON.stringify(d));}
-function renderPanel(){
+function getData(){try{return JSON.parse(localStorage.getItem(dkey()))||{finanzas:[],stock:[],calc:[],disenos:[],descrip:[],post:[],chat:[],mkt:[]};}catch(e){return {finanzas:[],stock:[],calc:[],disenos:[],descrip:[],post:[],chat:[],mkt:[]};}}
+function saveData(d){if(localStorage.getItem('sess'))localStorage.setItem(dkey(),JSON.stringify(d));}
+function persist(k,v){let d=getData();d[k].push(v);saveData(d);}
+function renderPersist(){
 let d=getData();
-document.getElementById('pFinanzasFull').innerHTML=d.finanzas.slice(-3).map(f=>'<div class=card><b>'+f.cuenta+'</b> $'+f.bal+'</div>').join('')||'<small>Sin datos</small>';
-document.getElementById('pStockFull').innerHTML=d.stock.slice(-3).map(s=>'<div class=card>📦 '+s.n+' $'+s.fi+'</div>').join('')||'<small>Sin datos</small>';
-document.getElementById('pCalcFull').innerHTML=d.calc.slice(-3).map(c=>'<div class=card>'+c+'</div>').join('')||'<small>Sin datos</small>';
-document.getElementById('pDisenosFull').innerHTML=d.disenos.slice(-3).map(x=>'<div class=card>'+x+'</div>').join('')||'<small>Sin datos</small>';
-document.getElementById('pMktFull').innerHTML=d.mkt.slice(-3).map(x=>'<div class=card>'+x+'</div>').join('')||'<small>Sin datos</small>';
-document.getElementById('pDescFull').innerHTML=d.descrip.slice(-3).map(x=>'<div class=card>'+x+'</div>').join('')||'<small>Sin datos</small>';
-document.getElementById('pPostFull').innerHTML=d.post.slice(-3).map(x=>'<div class=card>'+x+'</div>').join('')||'<small>Sin datos</small>';
-document.getElementById('pChatFull').innerHTML=d.chat.slice(-3).map(x=>'<div class=card>'+x+'</div>').join('')||'<small>Sin datos</small>';
+document.getElementById('pFinanzasFull').innerHTML=d.finanzas.map(f=>'<div class="card" data-fecha="'+(f.fecha||'')+'" data-cuenta="'+(f.cuenta||'')+'" data-ing="'+(f.ing||'')+'" data-egr="'+(f.egr||'')+'" data-bal="'+(f.bal||'')+'" data-det="'+(f.det||'')+'"><b>'+f.cuenta+'</b> ('+(f.fecha||'')+')<br>Balance: <b>$'+f.bal+'</b></div>').join('');
+document.getElementById('pStockFull').innerHTML=d.stock.map(s=>'<div class="card" data-n="'+s.n+'" data-c="'+s.c+'" data-co="'+s.co+'" data-ma="'+s.ma+'" data-mi="'+s.mi+'" data-de="'+s.de+'" data-fi="'+s.fi+'">📦 <b>'+s.n+'</b> x'+s.c+' - $'+s.fi+'</div>').join('');
+document.getElementById('pCalcFull').innerHTML=d.calc.map(c=>'<div class="card">'+c+'</div>').join('');
+document.getElementById('pDisenosFull').innerHTML=d.disenos.map(c=>'<div class="card">'+c+'</div>').join('');
+document.getElementById('pDescFull').innerHTML=d.descrip.map(c=>'<div class="card">'+c+'</div>').join('');
+document.getElementById('pPostFull').innerHTML=d.post.map(c=>'<div class="card">'+c+'</div>').join('');
+document.getElementById('pChatFull').innerHTML=d.chat.map(c=>'<div class="card">'+c+'</div>').join('');
+document.getElementById('pMktFull').innerHTML=d.mkt.map(c=>'<div class="card">'+c+'</div>').join('');
 }
-function reg(){let n=rN.value.trim(),e=rE.value.trim().toLowerCase(),p=rP.value;if(!n||!e||!p){aMsg.textContent='Completá todo';return;}let u=getUsers();if(u[e]){aMsg.textContent='Ya existe';return;}u[e]={n,e,p};saveUsers(u);document.getElementById('welcomeReg').style.display='flex';}
-function login(){let e=lE.value.trim().toLowerCase(),p=lP.value;let u=getUsers()[e];if(!u||u.p!==p){aMsg.textContent='Error login';return;}localStorage.setItem('sess',e);applyUser(u);if(!sessionStorage.getItem('wl')){sessionStorage.setItem('wl','1');document.getElementById('welcomeLogin').style.display='flex';}}
-function applyUser(u){loginPanel.style.display='none';userNameTop.textContent=u.n;panelContent.innerHTML='<b>'+u.n+'</b><br>'+u.e;pUserInfo.textContent=u.n+' • '+u.e;fixedPanelBtn.style.display='block';renderPanel();}
-function logout(){localStorage.removeItem('sess');sessionStorage.removeItem('wl');location.reload();}
-function openFullPanel(){if(!localStorage.getItem('sess')){alert('Logeate');return;}renderPanel();panelPage.classList.add('active');document.body.style.overflow='hidden';}
-function closeFullPanel(){panelPage.classList.remove('active');document.body.style.overflow='';}
+function showLoginBanner(){if(sessionStorage.getItem('w_login'))return;sessionStorage.setItem('w_login','1');document.getElementById('welcomeLogin').style.display='flex';}
+function showRegBanner(){document.getElementById('welcomeReg').style.display='flex';}
+function reg(){
+let n=document.getElementById('rN').value.trim();
+let e=document.getElementById('rE').value.trim().toLowerCase();
+let p=document.getElementById('rP').value;
+let msg=document.getElementById('aMsg');
+if(!n||!e||!p){msg.textContent='Completá todos los campos';return;}
+let users=getUsers();
+if(users[e]){msg.textContent='Ese email ya está registrado';return;}
+users[e]={n,e,p,created:Date.now()};
+saveUsers(users);
+showRegBanner();
+}
+function login(){
+let e=document.getElementById('lE').value.trim().toLowerCase();
+let p=document.getElementById('lP').value;
+let msg=document.getElementById('aMsg');
+let u=getUsers()[e];
+if(!u){msg.textContent='No existe esa cuenta';return;}
+if(u.p!==p){msg.textContent='Contraseña incorrecta';return;}
+localStorage.setItem('sess',e);
+applyUser(u);
+showLoginBanner();
+}
+function applyUser(u){
+document.getElementById('loginPanel').style.display='none';
+document.getElementById('userNameTop').textContent=u.n;
+document.getElementById('panelContent').innerHTML='<b>'+u.n+'</b><br>'+u.e;
+document.getElementById('pUserInfo').textContent=u.n+' • '+u.e;
+document.getElementById('fixedPanelBtn').style.display='block';
+renderPersist();
+}
+function logout(){localStorage.removeItem('sess');sessionStorage.removeItem('w_login');location.reload();}
+function openFullPanel(){if(!localStorage.getItem('sess')){alert('Iniciá sesión primero');return;}renderPersist();document.getElementById('panelPage').classList.add('active');document.body.style.overflow='hidden';}
+function closeFullPanel(){document.getElementById('panelPage').classList.remove('active');document.body.style.overflow='';}
 
+// CALCULADORA
 function calcMargen(){
-let c=+cCosto.value||0,v=+cVenta.value||0,o=+cOtros.value||0,tc=c+o,g=v-tc,m=v?g/v*100:0;
-let msg=m<20?'🔴 Subí precio':m<35?'🟡 Justo':m<=60?'🟢 Saludable':'🔵 Podés bajar';
-cRes.innerHTML='Costo $'+tc+' Ganancia $'+g+' Margen '+m.toFixed(1)+'% '+msg;
-let d=getData();d.calc.push('🧮 '+new Date().toLocaleDateString()+' $'+g+' '+m.toFixed(1)+'%');saveData(d);renderPanel();
+let c=+document.getElementById('cCosto').value||0;
+let v=+document.getElementById('cVenta').value||0;
+let o=+document.getElementById('cOtros').value||0;
+let tc=c+o; let g=v-tc; let m=v?g/v*100:0;
+let consejo=m<20?'🔴 Margen bajo: subí el precio o bajá costos':m<35?'🟡 Margen justo: estás bien pero podés mejorar':m<=60?'🟢 Margen saludable: buen equilibrio':'🔵 Margen alto: podrías bajar un poco para vender más volumen';
+document.getElementById('cRes').innerHTML='<b>Costo total:</b> $'+tc+'<br><b>Ganancia:</b> $'+g+'<br><b>Margen:</b> '+m.toFixed(1)+'%<br>'+consejo;
+persist('calc','🧮 '+new Date().toLocaleDateString()+' - Ganancia $'+g+' ('+m.toFixed(1)+'%)');
+renderPersist();
 }
+
+// FINANZAS
 function guardarFin(){
-let ing=+fIng.value||0,egr=+fEgr.value||0,bal=ing-egr;
-let d=getData();d.finanzas.push({fecha:fFecha.value,cuenta:fNombre.value||'Cuenta',ing,egr,bal,det:fDet.value});
-saveData(d);renderPanel();alert('Guardado ✅');
+let fecha=document.getElementById('fFecha').value;
+let cuenta=document.getElementById('fNombre').value||'Sin nombre';
+let ing=+document.getElementById('fIng').value||0;
+let egr=+document.getElementById('fEgr').value||0;
+let bal=ing-egr;
+let det=document.getElementById('fDet').value;
+persist('finanzas',{fecha:fecha,cuenta:cuenta,ing:ing,egr:egr,bal:bal,det:det});
+renderPersist();
+alert('✅ Guardado en tu panel');
 }
+
+// DESCRIPCION
 function genDesc(){
-let n=dNom.value||'Producto',m=dMar.value||'Marca';
-let outs=['🔥 OFERTA: '+n+' '+m+' ¡Stock limitado!','✨ NUEVO: '+n+' '+m+' calidad premium','💎 PREMIUM: '+n+' '+m+' envío todo el país'];
-dOut.innerHTML=outs.map(o=>'<div class=card>'+o+'</div>').join('');
-let d=getData();d.descrip.push('✨ '+n);saveData(d);renderPanel();
-}
-function buscarML(){if(!dNom.value){alert('Escribí producto');return;}window.open('https://listado.mercadolibre.com.ar/'+encodeURIComponent(dNom.value));}
-function sendChat(){
-let v=chatIn.value.trim();if(!v)return;
-chatBox.innerHTML+='<p><b>Vos:</b> '+v+'</p><p><b>IA:</b> Enfocate en margen, fotos y constancia 3x semana.</p>';
-let d=getData();d.chat.push('🤖 '+v);saveData(d);renderPanel();chatIn.value='';
-}
-let pf=0;
-function calcD(){let v=+sMin.value||0,ds=+sDesc.value||0;pf=v-v*ds/100;sDescRes.innerHTML='Final: <b>$'+pf.toFixed(2)+'</b>';}
-function addStock(){
-let d=getData();d.stock.push({n:sNom.value||'Prod',c:sCant.value||0,co:sCosto.value||0,ma:sMay.value||0,mi:sMin.value||0,de:sDesc.value||0,fi:pf.toFixed(2)});
-saveData(d);renderPanel();
-stockTb.innerHTML+='<tr><td>'+sNom.value+'</td><td>'+sCant.value+'</td><td>'+sCosto.value+'</td><td>'+sMay.value+'</td><td>'+sMin.value+'</td><td>'+sDesc.value+'%</td><td>$'+pf.toFixed(2)+'</td></tr>';
-}
-fUp.onchange=e=>fPrev.src=URL.createObjectURL(e.target.files[0]);
-['rB','rC','rS','rW'].forEach(id=>{document.getElementById(id).oninput=()=>{fPrev.style.filter='brightness('+rB.value+'%) contrast('+rC.value+'%) saturate('+rS.value+'%)';};});
-function dlFoto(t){if(!fPrev.src){alert('Subí foto');return;}let a=document.createElement('a');a.href=fPrev.src;a.download=t+'.jpg';a.click();}
-function saveFoto(){let d=getData();d.disenos.push('📸 Foto '+new Date().toLocaleTimeString());saveData(d);renderPanel();}
-
-let hist=[];
-function saveH(){hist.push(bannerPreview.innerHTML);if(hist.length>20)hist.shift();}
-function undoB(){if(hist.length)bannerPreview.innerHTML=hist.pop();}
-bUp.onchange=e=>{saveH();bannerImg.src=URL.createObjectURL(e.target.files[0]);bannerImg.style.display='block';};
-['#4a90e2','#e94e77','#2ecc71','#f39c12','#9b59b6','#111827'].forEach(c=>{let el=document.createElement('div');el.className='color';el.style.background=c;el.onclick=()=>{saveH();bannerPreview.style.background=c;};pal.appendChild(el);});
-['🔥','⭐','❤️','✨','🚀'].forEach(em=>{let b=document.createElement('button');b.textContent=em;b.className='btn btn-sec';b.onclick=()=>{saveH();for(let i=0;i<3;i++){let r=document.createElement('div');r.className='emoji-row';r.style.top=(15+i*30)+'%';r.textContent=(em+' ').repeat(10);bannerPreview.appendChild(r);}};eBtns.appendChild(b);});
-function rb(){pT.textContent=bT.value;pS.textContent=bS.value;pI.textContent=bI.value;pF.textContent=bF.value;pH.textContent=bH.value;}
-function saveBanner(){let d=getData();d.disenos.push('🎨 '+(bT.value||'Banner'));saveData(d);renderPanel();}
-
-function genP(){pPrev.innerText=ptTxt.value;let d=getData();d.post.push('📱 '+ptTxt.value.slice(0,70));saveData(d);renderPanel();}
-
-const mkts=[
-["1. Público objetivo","Definí edad, zona, gustos de tu cliente ideal. Sin esto le hablás a todos y no vendés."],
-["2. Propuesta de valor","Explicá en 10 segundos por qué elegirte a vos y no a otro."],
-["3. Identidad de marca","Mismos colores, logo y tono siempre. Genera confianza."],
-["4. Contenido 30 días","3 posteos/semana: enseña, muestra, vende. Constancia gana."],
-["5. Embudo","Atraé en redes, cerrá en WhatsApp, fidelizá con seguimiento."],
-["6. Publicidad paga","Empezá con un producto ganador, poco presupuesto a tu zona."],
-["7. WhatsApp Business","Catálogo y respuesta en <5 min. El 80% cierra así."],
-["8. Foto producto","Luz natural, fondo claro, 3 ángulos. Sube 30% el valor."],
-["9. Promociones","Con fecha límite para generar urgencia."],
-["10. Métricas","Medí alcance y ventas semanal. Quedate con lo que funciona."]
+let n=document.getElementById('dNom').value||'Mi producto';
+let m=document.getElementById('dMar').value||'Mi marca';
+let dat=document.getElementById('dDat').value||'';
+let versiones=[
+'🔥 <b>OFERTA IMPERDIBLE:</b> '+n+' '+m+'. '+dat+' ¡Stock limitado! #oferta',
+'✨ <b>NUEVO INGRESO:</b> Descubrí '+n+' de '+m+'. Calidad premium. '+dat,
+'💎 <b>VERSIÓN PREMIUM:</b> '+n+' '+m+' - Lo mejor para vos. '+dat+' Envíos a todo el país.'
 ];
-mkts.forEach((m,i)=>{
-let div=document.createElement('div');div.className='card';
-div.innerHTML='<b>'+m[0]+'</b><p>'+m[1]+'</p><button class=btn-sec onclick="descargarCriterio('+i+')">📥 Descargar</button> <button class=btn onclick="saveMkt('+i+')">💾 Guardar</button>';
-mktList.appendChild(div);
-});
-function saveMkt(i){let d=getData();d.mkt.push('📈 '+mkts[i][0]);saveData(d);renderPanel();}
-function descargarCriterio(i){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([mkts[i][0]+'\n\n'+mkts[i][1]],{type:'text/plain'}));a.download='mkt-'+(i+1)+'.txt';a.click();}
+document.getElementById('dOut').innerHTML=versiones.map(v=>'<div class="card">'+v+'</div>').join('');
+persist('descrip','✨ '+n+' - '+m);
+renderPersist();
+}
+function buscarML(){let q=document.getElementById('dNom').value;if(!q){alert('Escribí un producto');return;}window.open('https://listado.mercadolibre.com.ar/'+encodeURIComponent(q));}
 
-function abrirPlanilla(t){
-planillaTitle.textContent='Planilla: '+t;
-let d=getData(),html='';
-if(t=='finanzas'&&d.finanzas.length){html='<table><tr><th>Fecha</th><th>Cuenta</th><th>Ing</th><th>Egr</th><th>Bal</th><th>Detalle</th></tr>'+d.finanzas.map(f=>'<tr><td>'+f.fecha+'</td><td>'+f.cuenta+'</td><td>'+f.ing+'</td><td>'+f.egr+'</td><td><b>'+f.bal+'</b></td><td>'+f.det+'</td></tr>').join('')+'</table>';}
-else if(t=='stock'&&d.stock.length){html='<table><tr><th>Prod</th><th>Cant</th><th>Costo</th><th>May</th><th>Min</th><th>%</th><th>Final</th></tr>'+d.stock.map(s=>'<tr><td>'+s.n+'</td><td>'+s.c+'</td><td>'+s.co+'</td><td>'+s.ma+'</td><td>'+s.mi+'</td><td>'+s.de+'</td><td>'+s.fi+'</td></tr>').join('')+'</table>';}
-else if(t=='calc'){html=d.calc.map(c=>'<div class=card>'+c+'</div>').join('');}
-else if(t=='disenos'){html=d.disenos.map(c=>'<div class=card>'+c+'</div>').join('');}
-else if(t=='marketing'){html=d.mkt.map(c=>'<div class=card>'+c+'</div>').join('');}
-planillaBody.innerHTML=html||'<p>Sin datos guardados todavía.</p>';
-panelPage.classList.remove('active');
-planillaModal.classList.add('active');
+// CONSEJOS
+function sendChat(){
+let v=document.getElementById('chatIn').value.trim();if(!v)return;
+let box=document.getElementById('chatBox');
+box.innerHTML+='<p><b>Vos:</b> '+v+'</p><p><b>IA:</b> Buen punto. Te recomiendo enfocarte en tu margen, mejorar fotos y publicar 3 veces por semana. Medí resultados.</p>';
+box.scrollTop=box.scrollHeight;
+persist('chat','🤖 '+v);
+renderPersist();
+document.getElementById('chatIn').value='';
+}
+
+// STOCK
+let precioFinalStock=0;
+function calcD(){
+let v=+document.getElementById('sMin').value||0;
+let ds=+document.getElementById('sDesc').value||0;
+precioFinalStock=v-v*ds/100;
+document.getElementById('sDescRes').innerHTML=ds?('Precio con '+ds+'% OFF: <b>$'+precioFinalStock.toFixed(2)+'</b>'):'Sin descuento aplicado';
+}
+function addStock(){
+let n=document.getElementById('sNom').value||'Producto';
+let cant=document.getElementById('sCant').value||0;
+let co=document.getElementById('sCosto').value||0;
+let ma=document.getElementById('sMay').value||0;
+let mi=document.getElementById('sMin').value||0;
+let de=document.getElementById('sDesc').value||0;
+document.getElementById('stockTb').innerHTML+='<tr><td>'+n+'</td><td>'+cant+'</td><td>'+co+'</td><td>'+ma+'</td><td>'+mi+'</td><td>'+de+'%</td><td>$'+precioFinalStock.toFixed(2)+'</td></tr>';
+persist('stock',{n:n,c:cant,co:co,ma:ma,mi:mi,de:de,fi:precioFinalStock.toFixed(2)});
+renderPersist();
+}
+
+// FOTO PRO
+document.getElementById('fUp').onchange=e=>{document.getElementById('fPrev').src=URL.createObjectURL(e.target.files[0]);};
+['rB','rC','rS','rW'].forEach(id=>{document.getElementById(id).oninput=applyFilter;});
+function applyFilter(){
+let b=document.getElementById('rB').value;
+let c=document.getElementById('rC').value;
+let s=document.getElementById('rS').value;
+document.getElementById('fPrev').style.filter='brightness('+b+'%) contrast('+c+'%) saturate('+s+'%)';
+}
+function dlFoto(tipo){let src=document.getElementById('fPrev').src;if(!src){alert('Subí una foto');return;}let a=document.createElement('a');a.href=src;a.download=tipo+'.jpg';a.click();}
+function saveFoto(){persist('disenos','📸 Foto editada '+new Date().toLocaleTimeString());renderPersist();alert('Guardado en diseños');}
+
+// BANNER
+let histBanner=[];
+const bp=document.getElementById('bannerPreview');
+function saveH(){histBanner.push(bp.innerHTML);if(histBanner.length>25)histBanner.shift();}
+function undoB(){if(histBanner.length){bp.innerHTML=histBanner.pop();rebindBannerImg();}}
+function rebindBannerImg(){let img=document.getElementById('bannerImg');if(img)img.style.display=img.src?'block':'none';}
+document.getElementById('bUp').onchange=e=>{saveH();let img=document.getElementById('bannerImg');img.src=URL.createObjectURL(e.target.files[0]);img.style.display='block';};
+['#4a90e2','#e94e77','#2ecc71','#f39c12','#9b59b6','#111827','#ff6a00','#00bcd4'].forEach(col=>{
+let d=document.createElement('div');d.className='color';d.style.background=col;
+d.onclick=()=>{saveH();bp.style.background=col;};
+document.getElementById('pal').appendChild(d);
+});
+['🔥','⭐','❤️','✨','🚀','💥'].forEach(em=>{
+let b=document.createElement('button');b.textContent=em;b.className='btn btn-sec';b.style.fontSize='22px';
+b.onclick=()=>{saveH();for(let r=0;r<3;r++){let row=document.createElement('div');row.className='emoji-row';row.style.top=(15+r*30)+'%';row.textContent=(em+' ').repeat(12);bp.appendChild(row);}};
+document.getElementById('eBtns').appendChild(b);
+});
+function rb(){
+document.getElementById('pT').textContent=document.getElementById('bT').value;
+document.getElementById('pS').textContent=document.getElementById('bS').value;
+document.getElementById('pI').textContent=document.getElementById('bI').value;
+document.getElementById('pF').textContent=document.getElementById('bF').value;
+document.getElementById('pH').textContent=document.getElementById('bH').value;
+}
+function saveBanner(){persist('disenos','🎨 '+(document.getElementById('bT').value||'Banner sin título'));renderPersist();alert('Banner guardado');}
+
+// POST
+function genP(){
+let txt=document.getElementById('ptTxt').value;
+document.getElementById('pPrev').innerHTML='<b>Vista previa:</b><br>'+txt.replace(/\n/g,'<br>');
+persist('post','📱 '+txt.slice(0,80));
+renderPersist();
+}
+function copiarPost(){navigator.clipboard.writeText(document.getElementById('ptTxt').value);alert('Copiado ✅');}
+
+// MARKETING 10 CRITERIOS LARGOS
+const mkts=[
+["1. Definí tu público objetivo","No le vendas a todo el mundo. Definí edad, zona, poder adquisitivo y gustos de tu cliente ideal. Cuando sabés a quién le hablás, tus fotos, precios y textos conectan 10 veces más. Escribilo en una frase y pegala en tu local."],
+["2. Propuesta de valor clara","El cliente tiene que entender en 10 segundos por qué elegirte a vos y no a la competencia. ¿Sos más barato? ¿Más rápido? ¿Mejor calidad? Si no podés explicarlo simple, el cliente se va a otro lado."],
+["3. Identidad de marca coherente","Usá siempre los mismos colores, logo y forma de hablar. La gente compra lo que reconoce. Una marca coherente genera confianza y te hace ver profesional aunque recién empieces."],
+["4. Contenido constante 30 días","Publicá 3 veces por semana: un post que enseña, uno que muestra el producto y uno que vende. El algoritmo premia la constancia. No necesitas ser perfecto, necesitas ser constante."],
+["5. Embudo de ventas simple","Atraé con contenido en redes, convertí por WhatsApp y fidelizá con seguimiento. La mayoría pierde ventas porque no tiene este camino claro. Anotá de dónde viene cada cliente."],
+["6. Publicidad paga inteligente","Con $2000 por día podés llegar a miles de personas en tu ciudad. Empezá con un solo producto ganador. Probá, medí y después escalá. No pautes todo el catálogo junto."],
+["7. WhatsApp Business profesional","Poné catálogo, horarios, ubicación y respuestas rápidas. El 80% de las ventas se cierra si respondés en menos de 5 minutos. Usá etiquetas: nuevo, interesado, compró."],
+["8. Fotografía que vende","Fondo claro, luz natural de día, 3 ángulos distintos. Una buena foto aumenta el precio percibido un 30% sin cambiar el producto. Tu foto es tu vidriera."],
+["9. Promociones con urgencia","2x1, 3x2, descuento por cantidad o envío gratis desde cierto monto. Siempre con fecha límite: 'solo hasta el domingo'. Sin urgencia la gente lo deja para después y no compra."],
+["10. Medí todo cada semana","Anotá alcance, mensajes y ventas. Lo que no se mide no se mejora. Compará semana a semana en tu panel y quedate solo con lo que funciona. Eliminá lo que no vende."]
+];
+(function(){
+let ml=document.getElementById('mktList');
+mkts.forEach((m,i)=>{
+let d=document.createElement('div');d.className='card';
+d.innerHTML='<b style="font-size:16px">'+m[0]+'</b><p style="line-height:1.6">'+m[1]+'</p><button class="btn btn-sec" onclick="descargarCriterio('+i+')">📥 Descargar este criterio</button> <button class="btn" onclick="saveMkt('+i+')">💾 Guardar en panel</button>';
+ml.appendChild(d);
+});
+})();
+function saveMkt(i){persist('mkt','📈 '+mkts[i][0]);renderPersist();alert('Guardado');}
+function descargarCriterio(i){let blob=new Blob([mkts[i][0]+"\n\n"+mkts[i][1]],{type:'text/plain;charset=utf-8'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='marketing-'+(i+1)+'.txt';a.click();}
+
+// PLANILLAS - FIX SELECTOR + FULLSCREEN
+function abrirPlanilla(tipo){
+document.getElementById('planillaTitle').textContent='Planilla: '+tipo;
+let html='<p>No hay datos todavía</p>';
+if(tipo=='finanzas'){
+let items=document.querySelectorAll('#pFinanzasFull.card');
+if(items.length){html='<table><tr><th>Fecha</th><th>Cuenta</th><th>Ingresos</th><th>Egresos</th><th>Balance</th><th>Detalle</th></tr>';
+items.forEach(c=>{html+='<tr><td>'+(c.dataset.fecha||'')+'</td><td>'+(c.dataset.cuenta||'')+'</td><td>'+(c.dataset.ing||'')+'</td><td>'+(c.dataset.egr||'')+'</td><td>'+(c.dataset.bal||'')+'</td><td>'+(c.dataset.det||'')+'</td></tr>';});
+html+='</table>';}
+}
+if(tipo=='stock'){
+let items=document.querySelectorAll('#pStockFull.card');
+if(items.length){html='<table><tr><th>Producto</th><th>Cant</th><th>Costo</th><th>May</th><th>Min</th><th>Desc%</th><th>Final</th></tr>';
+items.forEach(c=>{html+='<tr><td>'+c.dataset.n+'</td><td>'+c.dataset.c+'</td><td>'+c.dataset.co+'</td><td>'+c.dataset.ma+'</td><td>'+c.dataset.mi+'</td><td>'+c.dataset.de+'</td><td>'+c.dataset.fi+'</td></tr>';});
+html+='</table>';}
+}
+if(tipo=='calc'||tipo=='disenos'||tipo=='marketing'){
+let sel=tipo=='calc'?'#pCalcFull.card':tipo=='disenos'?'#pDisenosFull.card':'#pMktFull.card';
+let items=document.querySelectorAll(sel);
+if(items.length){html='<table><tr><th>Registro</th></tr>';items.forEach(c=>{html+='<tr><td>'+c.innerText+'</td></tr>';});html+='</table>';}
+}
+document.getElementById('planillaBody').innerHTML=html;
+document.getElementById('panelPage').classList.remove('active');
+document.getElementById('planillaModal').classList.add('active');
 document.body.style.overflow='hidden';
 }
-function cerrarPlanilla(){planillaModal.classList.remove('active');panelPage.classList.add('active');}
+function cerrarPlanilla(){document.getElementById('planillaModal').classList.remove('active');document.getElementById('panelPage').classList.add('active');document.body.style.overflow='';}
 function descargarCSV(){
-let rows=[];document.querySelectorAll('#planillaBody table tr').forEach(r=>{rows.push([...r.querySelectorAll('th,td')].map(c=>'"'+c.innerText+'"').join(','));});
-let a=document.createElement('a');a.href='data:text/csv;charset=utf-8,[STRIPPED]'+rows.join('\n'));a.download='planilla.csv';a.click();
+let rows=[];
+document.querySelectorAll('#planillaBody table tr').forEach(r=>{
+let cols=[...r.querySelectorAll('th,td')].map(c=>'"'+c.innerText.replace(/"/g,'""')+'"');
+rows.push(cols.join(','));
+});
+let csv=rows.join('\n');
+let a=document.createElement('a');
+a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+a.download='planilla.csv';
+a.click();
 }
-(function(){let s=localStorage.getItem('sess');if(s){let u=getUsers()[s];if(u)applyUser(u);}})();
+
+// SESION ACTIVA
+(function(){
+let s=localStorage.getItem('sess');
+if(s){let u=getUsers()[s];if(u)applyUser(u);}
+})();
 </script>
 </body>
 </html>
