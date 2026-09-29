@@ -49,9 +49,13 @@ th{background:#f8fafc}
 #fixedPanelBtn{position:fixed;bottom:22px;right:22px;z-index:90;background:#111827;color:#fff;border:0;border-radius:50px;padding:16px 24px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.35);cursor:pointer;display:none}
 .welcome-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center;padding:20px}
 .welcome-card{padding:36px 28px;border-radius:26px;max-width:440px;text-align:center;position:relative;width:100%}
+#bannerOferta{background:#6c5ce7;color:#fff;padding:12px;text-align:center;font-weight:700;position:sticky;top:0;z-index:40}
+img.qr{max-width:220px;display:block;margin:10px 0;border:1px solid #eee;border-radius:12px}
+.link-box a{display:inline-block;margin:5px 8px 0 0;color:#6c5ce7;font-weight:600}
 </style>
 </head>
 <body>
+<div id="bannerOferta">🔥 Oferta lanzamiento: quedan <span id="diasRestantes">5</span> días gratis</div>
 
 <div class="topbar">
 <div>🚀 <b>Emprendedor PRO</b></div>
@@ -68,6 +72,7 @@ th{background:#f8fafc}
 <button onclick="show('banner')">🎨 Banner</button>
 <button onclick="show('post')">📱 Post</button>
 <button onclick="show('marketing')">📈 Marketing</button>
+<button onclick="show('apis')">🔌 APIs</button>
 </nav>
 
 <!-- CALCULADORA -->
@@ -195,6 +200,21 @@ th{background:#f8fafc}
 <div id="mktList" style="display:grid;gap:12px"></div>
 </section>
 
+<!-- APIS 10 COMPLETAS -->
+<section id="apis">
+<h3>🔌 10 APIs integradas</h3>
+<div class="card"><h4>1. 💵 Dólar Blue</h4><button class="btn btn-acc" onclick="apiDolar()">Consultar</button><div id="o1"></div></div>
+<div class="card"><h4>2. 💬 WhatsApp Link</h4><input id="waN" placeholder="5491123456789"><input id="waM" placeholder="Mensaje"><button class="btn btn-acc" onclick="apiWA()">Generar</button><div id="o3"></div></div>
+<div class="card"><h4>3. 🌤️ Clima</h4><input id="clC" placeholder="Tres Arroyos"><button class="btn btn-acc" onclick="apiClima()">Ver</button><div id="o4"></div></div>
+<div class="card"><h4>4. 📍 Mi ubicación</h4><button class="btn btn-acc" onclick="apiGeo()">Obtener</button><div id="o6"></div></div>
+<div class="card"><h4>5. 💱 ARS a USD</h4><input id="cARS" type="number" placeholder="Precio ARS"><button class="btn btn-acc" onclick="apiConv()">Convertir</button><div id="o7"></div></div>
+<div class="card"><h4>6. ⬛ Generador QR</h4><input id="qrT" placeholder="https://instagram.com/tu_negocio"><button class="btn btn-acc" onclick="apiQR()">Crear QR</button><div id="o8"></div></div>
+<div class="card"><h4>7. 💳 Mercado Pago Texto</h4><input id="mpMonto" type="number" placeholder="Monto $"><input id="mpMotivo" placeholder="Motivo"><button class="btn btn-acc" onclick="apiMP()">Generar</button><div id="o9"></div></div>
+<div class="card"><h4>8. 📦 Envío</h4><input id="envCP" placeholder="CP destino"><select id="envPeso"><option value="1">Hasta 1kg</option><option value="5">Hasta 5kg</option><option value="10">Hasta 10kg</option></select><button class="btn btn-acc" onclick="apiEnvio()">Calcular</button><div id="o10"></div><div class="link-box"><a href="https://www.correoargentino.com.ar/formularios/cpa" target="_blank">Correo</a><a href="https://www.andreani.com/cotizar-envio" target="_blank">Andreani</a><a href="https://www.viacargo.com.ar/cotizador" target="_blank">Via Cargo</a></div></div>
+<div class="card"><h4>9. 🌐 Traductor</h4><textarea id="trT" placeholder="Escribí en español"></textarea><button class="btn btn-acc" onclick="apiTrad('es|en')">A inglés</button><button class="btn btn-acc" onclick="apiTrad('es|pt')">A portugués</button><div id="o11"></div></div>
+<div class="card"><h4>10. 📷 Código barras</h4><input id="cbT" placeholder="Código"><button class="btn btn-acc" onclick="apiCB()">Buscar</button><div id="o12"></div></div>
+</section>
+
 <!-- PANEL FULL -->
 <div id="panelPage">
 <div class="panel-header">
@@ -272,16 +292,18 @@ th{background:#f8fafc}
 <button id="fixedPanelBtn" onclick="openFullPanel()">👤 Mi Panel</button>
 
 <script>
+// BANNER 5 DIAS - CUENTA REAL
+(function(){let k='oferta_inicio';let i=localStorage.getItem(k);if(!i){i=Date.now();localStorage.setItem(k,i);}let dias=Math.floor((Date.now()-parseInt(i))/(1000*60*60*24));let rest=5-dias;if(rest<0)rest=0;let el=document.getElementById('diasRestantes');if(el)el.textContent=rest;if(rest===0){let b=document.getElementById('bannerOferta');if(b)b.innerHTML='⏰ Tu prueba gratis terminó - $4.500/mes para seguir';}})();
 // NAVEGACION
 function show(id){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
 function sw(t){document.getElementById('fl').style.display=t=='l'?'block':'none';document.getElementById('fr').style.display=t=='r'?'block':'none';document.getElementById('aMsg').textContent='';}
-
-// USUARIOS + PERSISTENCIA
+// USUARIOS + PERSISTENCIA + SYNC PANEL
 function getUsers(){return JSON.parse(localStorage.getItem('users_db')||'{}');}
 function saveUsers(u){localStorage.setItem('users_db',JSON.stringify(u));}
 function dkey(){return 'emp_data_'+localStorage.getItem('sess');}
 function getData(){try{return JSON.parse(localStorage.getItem(dkey()))||{finanzas:[],stock:[],calc:[],disenos:[],descrip:[],post:[],chat:[],mkt:[]};}catch(e){return {finanzas:[],stock:[],calc:[],disenos:[],descrip:[],post:[],chat:[],mkt:[]};}}
-function saveData(d){if(localStorage.getItem('sess'))localStorage.setItem(dkey(),JSON.stringify(d));}
+function saveData(d){if(localStorage.getItem('sess')){localStorage.setItem(dkey(),JSON.stringify(d));syncToPanel();}}
+function syncToPanel(){let sess=localStorage.getItem('sess');if(!sess)return;let data=localStorage.getItem(dkey());localStorage.setItem('emp_panel_sync',JSON.stringify({user:sess,at:Date.now(),data:data?JSON.parse(data):null}));}
 function persist(k,v){let d=getData();d[k].push(v);saveData(d);}
 function renderPersist(){
 let d=getData();
@@ -304,8 +326,9 @@ let msg=document.getElementById('aMsg');
 if(!n||!e||!p){msg.textContent='Completá todos los campos';return;}
 let users=getUsers();
 if(users[e]){msg.textContent='Ese email ya está registrado';return;}
-users[e]={n,e,p,created:Date.now()};
+users[e]={n,e,p,created:Date.now(),fechaRegistro:new Date().toISOString(),visitas:1,ultimaVisita:Date.now()};
 saveUsers(users);
+trackVisita();
 showRegBanner();
 }
 function login(){
@@ -316,7 +339,8 @@ let u=getUsers()[e];
 if(!u){msg.textContent='No existe esa cuenta';return;}
 if(u.p!==p){msg.textContent='Contraseña incorrecta';return;}
 localStorage.setItem('sess',e);
-applyUser(u);
+let us=getUsers();us[e].visitas=(us[e].visitas||0)+1;us[e].ultimaVisita=Date.now();saveUsers(us);
+applyUser(us[e]);
 showLoginBanner();
 }
 function applyUser(u){
@@ -325,12 +349,11 @@ document.getElementById('userNameTop').textContent=u.n;
 document.getElementById('panelContent').innerHTML='<b>'+u.n+'</b><br>'+u.e;
 document.getElementById('pUserInfo').textContent=u.n+' • '+u.e;
 document.getElementById('fixedPanelBtn').style.display='block';
-renderPersist();
+renderPersist();syncToPanel();
 }
 function logout(){localStorage.removeItem('sess');sessionStorage.removeItem('w_login');location.reload();}
 function openFullPanel(){if(!localStorage.getItem('sess')){alert('Iniciá sesión primero');return;}renderPersist();document.getElementById('panelPage').classList.add('active');document.body.style.overflow='hidden';}
 function closeFullPanel(){document.getElementById('panelPage').classList.remove('active');document.body.style.overflow='';}
-
 // CALCULADORA
 function calcMargen(){
 let c=+document.getElementById('cCosto').value||0;
@@ -342,7 +365,6 @@ document.getElementById('cRes').innerHTML='<b>Costo total:</b> $'+tc+'<br><b>Gan
 persist('calc','🧮 '+new Date().toLocaleDateString()+' - Ganancia $'+g+' ('+m.toFixed(1)+'%)');
 renderPersist();
 }
-
 // FINANZAS
 function guardarFin(){
 let fecha=document.getElementById('fFecha').value;
@@ -355,7 +377,6 @@ persist('finanzas',{fecha:fecha,cuenta:cuenta,ing:ing,egr:egr,bal:bal,det:det});
 renderPersist();
 alert('✅ Guardado en tu panel');
 }
-
 // DESCRIPCION
 function genDesc(){
 let n=document.getElementById('dNom').value||'Mi producto';
@@ -371,7 +392,6 @@ persist('descrip','✨ '+n+' - '+m);
 renderPersist();
 }
 function buscarML(){let q=document.getElementById('dNom').value;if(!q){alert('Escribí un producto');return;}window.open('https://listado.mercadolibre.com.ar/'+encodeURIComponent(q));}
-
 // CONSEJOS
 function sendChat(){
 let v=document.getElementById('chatIn').value.trim();if(!v)return;
@@ -382,7 +402,6 @@ persist('chat','🤖 '+v);
 renderPersist();
 document.getElementById('chatIn').value='';
 }
-
 // STOCK
 let precioFinalStock=0;
 function calcD(){
@@ -402,7 +421,6 @@ document.getElementById('stockTb').innerHTML+='<tr><td>'+n+'</td><td>'+cant+'</t
 persist('stock',{n:n,c:cant,co:co,ma:ma,mi:mi,de:de,fi:precioFinalStock.toFixed(2)});
 renderPersist();
 }
-
 // FOTO PRO
 document.getElementById('fUp').onchange=e=>{document.getElementById('fPrev').src=URL.createObjectURL(e.target.files[0]);};
 ['rB','rC','rS','rW'].forEach(id=>{document.getElementById(id).oninput=applyFilter;});
@@ -414,48 +432,7 @@ document.getElementById('fPrev').style.filter='brightness('+b+'%) contrast('+c+'
 }
 function dlFoto(tipo){let src=document.getElementById('fPrev').src;if(!src){alert('Subí una foto');return;}let a=document.createElement('a');a.href=src;a.download=tipo+'.jpg';a.click();}
 function saveFoto(){persist('disenos','📸 Foto editada '+new Date().toLocaleTimeString());renderPersist();alert('Guardado en diseños');}
-
 // BANNER
-let histBanner=[];
-const bp=document.getElementById('bannerPreview');
-function saveH(){histBanner.push(bp.innerHTML);if(histBanner.length>25)histBanner.shift();}
-function undoB(){if(histBanner.length){bp.innerHTML=histBanner.pop();rebindBannerImg();}}
-function rebindBannerImg(){let img=document.getElementById('bannerImg');if(img)img.style.display=img.src?'block':'none';}
-document.getElementById('bUp').onchange=e=>{saveH();let img=document.getElementById('bannerImg');img.src=URL.createObjectURL(e.target.files[0]);img.style.display='block';};
-['#4a90e2','#e94e77','#2ecc71','#f39c12','#9b59b6','#111827','#ff6a00','#00bcd4'].forEach(col=>{
-let d=document.createElement('div');d.className='color';d.style.background=col;
-d.onclick=()=>{saveH();bp.style.background=col;};
-document.getElementById('pal').appendChild(d);
-});
-['🔥','⭐','❤️','✨','🚀','💥'].forEach(em=>{
-let b=document.createElement('button');b.textContent=em;b.className='btn btn-sec';b.style.fontSize='22px';
-b.onclick=()=>{saveH();for(let r=0;r<3;r++){let row=document.createElement('div');row.className='emoji-row';row.style.top=(15+r*30)+'%';row.textContent=(em+' ').repeat(12);bp.appendChild(row);}};
-document.getElementById('eBtns').appendChild(b);
-});
-function rb(){
-document.getElementById('pT').textContent=document.getElementById('bT').value;
-document.getElementById('pS').textContent=document.getElementById('bS').value;
-document.getElementById('pI').textContent=document.getElementById('bI').value;
-document.getElementById('pF').textContent=document.getElementById('bF').value;
-document.getElementById('pH').textContent=document.getElementById('bH').value;
-}
-const plantillas=[
-{t:"🔥 OFERTA IMPERDIBLE",s:"Hasta 50% OFF solo esta semana",bg:"linear-gradient(135deg,#e53935,#b71c1c)",emoji:"🔥"},
-{t:"✨ NUEVO INGRESO",s:"Descubrí lo último",bg:"linear-gradient(135deg,#6c5ce7,#a855f7)",emoji:"✨"},
-{t:"💎 COLECCIÓN PREMIUM",s:"Calidad exclusiva",bg:"linear-gradient(135deg,#111827,#374151)",emoji:"💎"},
-{t:"🌿 OFERTA NATURAL",s:"Fresco y saludable",bg:"linear-gradient(135deg,#2ecc71,#27ae60)",emoji:"🌿"}
-];
-function usarPlantilla(i){
-saveH();
-let p=plantillas[i];
-bp.style.background=p.bg;
-document.getElementById('bT').value=p.t;
-document.getElementById('bS').value=p.s;
-rb();
-let row=document.createElement('div');row.className='emoji-row';row.style.top='25%';row.textContent=(p.emoji+' ').repeat(10);bp.appendChild(row);
-}
-function saveBanner(){persist('disenos','🎨 '+(document.getElementById('bT').value||'Banner sin título'));renderPersist();alert('Banner guardado');}
-
 // POST
 function genP(){
 let txt=document.getElementById('ptTxt').value;
@@ -464,7 +441,6 @@ persist('post','📱 '+txt.slice(0,80));
 renderPersist();
 }
 function copiarPost(){navigator.clipboard.writeText(document.getElementById('ptTxt').value);alert('Copiado ✅');}
-
 // MARKETING 10 CRITERIOS LARGOS
 const mkts=[
 ["1. Definí tu público objetivo","No le vendas a todo el mundo. Definí edad, zona, poder adquisitivo y gustos de tu cliente ideal. Cuando sabés a quién le hablás, tus fotos, precios y textos conectan 10 veces más. Escribilo en una frase y pegala en tu local."],
@@ -488,8 +464,7 @@ ml.appendChild(d);
 })();
 function saveMkt(i){persist('mkt','📈 '+mkts[i][0]);renderPersist();alert('Guardado');}
 function descargarCriterio(i){let blob=new Blob([mkts[i][0]+"\n\n"+mkts[i][1]],{type:'text/plain;charset=utf-8'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='marketing-'+(i+1)+'.txt';a.click();}
-
-// PLANILLAS - CARGAN DESDE getData()
+// PLANILLAS
 function abrirPlanilla(tipo){
 document.getElementById('planillaTitle').textContent='Planilla: '+tipo;
 let d=getData();
@@ -527,12 +502,24 @@ a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
 a.download='planilla.csv';
 a.click();
 }
-
+// APIS 10 COMPLETAS
+let blue=1000;
+async function apiDolar(){let o=document.getElementById('o1');o.textContent='Consultando...';try{let r=await fetch('https://dolarapi.com/v1/dolares/blue');let j=await r.json();blue=j.venta;o.innerHTML='Compra $'+j.compra+' / Venta $'+j.venta+'<br><small>'+j.fechaActualizacion+'</small>'}catch(e){o.textContent='Error, probá de nuevo'}}
+function apiWA(){let n=document.getElementById('waN').value.replace(/\D/g,'');let m=encodeURIComponent(document.getElementById('waM').value||'Hola, quiero info');if(!n){alert('Poné número');return;}let l='https://wa.me/'+n+'?text='+m;document.getElementById('o3').innerHTML='<a href="'+l+'" target="_blank">'+l+'</a><br><button class="btn btn-sec" onclick="navigator.clipboard.writeText(\''+l+'\')">Copiar</button>'}
+async function apiClima(){let c=document.getElementById('clC').value||'Tres Arroyos';let o=document.getElementById('o4');o.textContent='Buscando...';try{let g=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(c)+'&count=1&language=es');let gj=await g.json();if(!gj.results){o.textContent='Ciudad no encontrada';return;}let lat=gj.results[0].latitude,lon=gj.results[0].longitude;let w=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,relative_humidity_2m,weather_code&timezone=auto');let wj=await w.json();o.innerHTML='<b>'+c+'</b>: '+wj.current.temperature_2m+'°C, humedad '+wj.current.relative_humidity_2m+'%'}catch(e){o.textContent='Error clima'}}
+function apiGeo(){let o=document.getElementById('o6');if(!navigator.geolocation){o.textContent='No soportado';return;}o.textContent='Obteniendo...';navigator.geolocation.getCurrentPosition(p=>{o.innerHTML='Lat '+p.coords.latitude.toFixed(4)+', Lon '+p.coords.longitude.toFixed(4)+'<br><a href="https://www.google.com/maps?q='+p.coords.latitude+','+p.coords.longitude+'" target="_blank">Ver en Google Maps</a>'},()=>{o.textContent='Permiso denegado'})}
+async function apiConv(){try{let r=await fetch('https://dolarapi.com/v1/dolares/blue');let j=await r.json();blue=j.venta}catch(e){}let ars=+document.getElementById('cARS').value||0;document.getElementById('o7').innerHTML='≈ USD '+(ars/blue).toFixed(2)+'<br><small>Dólar blue: $'+blue+'</small>'}
+function apiQR(){let val=document.getElementById('qrT').value||'https://instagram.com';let url='https://api.qrserver.com/v1/create-qr-code/?size=500x500&data='+encodeURIComponent(val);document.getElementById('o8').innerHTML='<img class="qr" src="'+url+'"><br><button class="btn btn-acc" onclick="descargarQR(\''+url+'\')">⬇️ Descargar PNG</button>'}
+async function descargarQR(url){try{let r=await fetch(url);let b=await r.blob();let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='qr-emprendedor.png';a.click();}catch(e){window.open(url,'_blank')}}
+function apiMP(){let m=document.getElementById('mpMonto').value;let mo=document.getElementById('mpMotivo').value||'producto';if(!m){alert('Poné monto');return;}let txt='Hola! El total es $'+m+' por '+mo+'. Te paso el link de pago de Mercado Pago:';document.getElementById('o9').innerHTML='<div class="card">'+txt+'</div><button class="btn btn-sec" onclick="navigator.clipboard.writeText(\''+txt+'\')">📋 Copiar texto</button>'}
+function apiEnvio(){let cp=document.getElementById('envCP').value;let peso=document.getElementById('envPeso').value;let base={'1':4500,'5':7500,'10':10500};let est=base[peso]||4500;document.getElementById('o10').innerHTML='CP '+cp+': estimado <b>~$'+est+'</b> <small>(orientativo)</small>'}
+async function apiTrad(pair){let t=document.getElementById('trT').value.trim();if(!t){alert('Escribí texto');return;}let o=document.getElementById('o11');o.textContent='Traduciendo...';try{let r=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(t)+'&langpair='+pair);let j=await r.json();o.innerHTML='<b>Traducción:</b><br>'+j.responseData.translatedText}catch(e){o.textContent='Error'}}
+async function apiCB(){let c=document.getElementById('cbT').value.trim();let o=document.getElementById('o12');if(!c){alert('Poné código');return;}o.textContent='Buscando...';try{let r=await fetch('https://world.openfoodfacts.org/api/v0/product/'+c+'.json');let j=await r.json();if(j.status===1){o.innerHTML='<b>'+(j.product.product_name||'Producto encontrado')+'</b><br>'+(j.product.brands||'')}else{o.textContent='No encontrado'}}catch(e){o.textContent='No encontrado'}}
+// TRACK VISITAS
+function trackVisita(){let v=JSON.parse(localStorage.getItem('emp_visitas')||'[]');let sess=localStorage.getItem('sess')||'anonimo';v.push({user:sess,fecha:new Date().toISOString()});localStorage.setItem('emp_visitas',JSON.stringify(v.slice(-200)));}
+window.addEventListener('load',trackVisita);
 // SESION ACTIVA
-(function(){
-let s=localStorage.getItem('sess');
-if(s){let u=getUsers()[s];if(u)applyUser(u);}
-})();
+(function(){let s=localStorage.getItem('sess');if(s){let u=getUsers()[s];if(u)applyUser(u);}})();
 </script>
 </body>
 </html>
