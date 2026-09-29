@@ -34,6 +34,8 @@ th{background:#f8fafc}
 .small-social{position:absolute;bottom:12px;z-index:4;display:flex;gap:12px;background:rgba(0,0,0,.6);padding:8px 16px;border-radius:20px;font-size:12px}
 .palette{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
 .color{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid #e5e7eb}
+.template-row{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.template-btn{border:2px solid #e5e7eb;border-radius:12px;padding:10px;cursor:pointer;background:#fff;flex:1;min-width:120px;text-align:center}
 #panelPage{display:none;position:fixed;inset:0;background:#eef1f6;z-index:60;overflow:auto}
 #panelPage.active{display:block}
 .panel-header{background:#111827;color:#fff;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
@@ -148,6 +150,13 @@ th{background:#f8fafc}
 <!-- BANNER -->
 <section id="banner">
 <h3>🎨 Creador de Banner estilo Canva</h3>
+<label>📋 Plantillas</label>
+<div class="template-row">
+<div class="template-btn" onclick="usarPlantilla(0)">🔥<br><b>Oferta</b></div>
+<div class="template-btn" onclick="usarPlantilla(1)">✨<br><b>Lanzamiento</b></div>
+<div class="template-btn" onclick="usarPlantilla(2)">💎<br><b>Premium</b></div>
+<div class="template-btn" onclick="usarPlantilla(3)">🌿<br><b>Natural</b></div>
+</div>
 <label>Subí tu foto de producto</label><input type="file" id="bUp" accept="image/*">
 <label>Color de fondo</label><div class="palette" id="pal"></div>
 <label>Emojis decorativos</label><div id="eBtns" style="margin:8px 0"></div>
@@ -430,6 +439,21 @@ document.getElementById('pI').textContent=document.getElementById('bI').value;
 document.getElementById('pF').textContent=document.getElementById('bF').value;
 document.getElementById('pH').textContent=document.getElementById('bH').value;
 }
+const plantillas=[
+{t:"🔥 OFERTA IMPERDIBLE",s:"Hasta 50% OFF solo esta semana",bg:"linear-gradient(135deg,#e53935,#b71c1c)",emoji:"🔥"},
+{t:"✨ NUEVO INGRESO",s:"Descubrí lo último",bg:"linear-gradient(135deg,#6c5ce7,#a855f7)",emoji:"✨"},
+{t:"💎 COLECCIÓN PREMIUM",s:"Calidad exclusiva",bg:"linear-gradient(135deg,#111827,#374151)",emoji:"💎"},
+{t:"🌿 OFERTA NATURAL",s:"Fresco y saludable",bg:"linear-gradient(135deg,#2ecc71,#27ae60)",emoji:"🌿"}
+];
+function usarPlantilla(i){
+saveH();
+let p=plantillas[i];
+bp.style.background=p.bg;
+document.getElementById('bT').value=p.t;
+document.getElementById('bS').value=p.s;
+rb();
+let row=document.createElement('div');row.className='emoji-row';row.style.top='25%';row.textContent=(p.emoji+' ').repeat(10);bp.appendChild(row);
+}
 function saveBanner(){persist('disenos','🎨 '+(document.getElementById('bT').value||'Banner sin título'));renderPersist();alert('Banner guardado');}
 
 // POST
@@ -465,26 +489,25 @@ ml.appendChild(d);
 function saveMkt(i){persist('mkt','📈 '+mkts[i][0]);renderPersist();alert('Guardado');}
 function descargarCriterio(i){let blob=new Blob([mkts[i][0]+"\n\n"+mkts[i][1]],{type:'text/plain;charset=utf-8'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='marketing-'+(i+1)+'.txt';a.click();}
 
-// PLANILLAS - FIX SELECTOR + FULLSCREEN
+// PLANILLAS - CARGAN DESDE getData()
 function abrirPlanilla(tipo){
 document.getElementById('planillaTitle').textContent='Planilla: '+tipo;
+let d=getData();
 let html='<p>No hay datos todavía</p>';
-if(tipo=='finanzas'){
-let items=document.querySelectorAll('#pFinanzasFull.card');
-if(items.length){html='<table><tr><th>Fecha</th><th>Cuenta</th><th>Ingresos</th><th>Egresos</th><th>Balance</th><th>Detalle</th></tr>';
-items.forEach(c=>{html+='<tr><td>'+(c.dataset.fecha||'')+'</td><td>'+(c.dataset.cuenta||'')+'</td><td>'+(c.dataset.ing||'')+'</td><td>'+(c.dataset.egr||'')+'</td><td>'+(c.dataset.bal||'')+'</td><td>'+(c.dataset.det||'')+'</td></tr>';});
-html+='</table>';}
+if(tipo=='finanzas'&&d.finanzas.length){
+html='<table><tr><th>Fecha</th><th>Cuenta</th><th>Ingresos</th><th>Egresos</th><th>Balance</th><th>Detalle</th></tr>'+d.finanzas.map(f=>'<tr><td>'+(f.fecha||'')+'</td><td>'+(f.cuenta||'')+'</td><td>'+(f.ing||'')+'</td><td>'+(f.egr||'')+'</td><td>'+(f.bal||'')+'</td><td>'+(f.det||'')+'</td></tr>').join('')+'</table>';
 }
-if(tipo=='stock'){
-let items=document.querySelectorAll('#pStockFull.card');
-if(items.length){html='<table><tr><th>Producto</th><th>Cant</th><th>Costo</th><th>May</th><th>Min</th><th>Desc%</th><th>Final</th></tr>';
-items.forEach(c=>{html+='<tr><td>'+c.dataset.n+'</td><td>'+c.dataset.c+'</td><td>'+c.dataset.co+'</td><td>'+c.dataset.ma+'</td><td>'+c.dataset.mi+'</td><td>'+c.dataset.de+'</td><td>'+c.dataset.fi+'</td></tr>';});
-html+='</table>';}
+if(tipo=='stock'&&d.stock.length){
+html='<table><tr><th>Producto</th><th>Cant</th><th>Costo</th><th>May</th><th>Min</th><th>Desc%</th><th>Final</th></tr>'+d.stock.map(s=>'<tr><td>'+s.n+'</td><td>'+s.c+'</td><td>'+s.co+'</td><td>'+s.ma+'</td><td>'+s.mi+'</td><td>'+s.de+'</td><td>'+s.fi+'</td></tr>').join('')+'</table>';
 }
-if(tipo=='calc'||tipo=='disenos'||tipo=='marketing'){
-let sel=tipo=='calc'?'#pCalcFull.card':tipo=='disenos'?'#pDisenosFull.card':'#pMktFull.card';
-let items=document.querySelectorAll(sel);
-if(items.length){html='<table><tr><th>Registro</th></tr>';items.forEach(c=>{html+='<tr><td>'+c.innerText+'</td></tr>';});html+='</table>';}
+if(tipo=='calc'&&d.calc.length){
+html='<table><tr><th>Registro</th></tr>'+d.calc.map(c=>'<tr><td>'+c+'</td></tr>').join('')+'</table>';
+}
+if(tipo=='disenos'&&d.disenos.length){
+html='<table><tr><th>Registro</th></tr>'+d.disenos.map(c=>'<tr><td>'+c+'</td></tr>').join('')+'</table>';
+}
+if(tipo=='marketing'&&d.mkt.length){
+html='<table><tr><th>Registro</th></tr>'+d.mkt.map(c=>'<tr><td>'+c+'</td></tr>').join('')+'</table>';
 }
 document.getElementById('planillaBody').innerHTML=html;
 document.getElementById('panelPage').classList.remove('active');
