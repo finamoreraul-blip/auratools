@@ -221,6 +221,44 @@ img.qr{max-width:220px;display:block;margin:10px 0;border:1px solid #eee;border-
 <p style="color:#6b7280">Cada criterio tiene su explicación profunda y botón para descargar.</p>
 <div id="mktList" style="display:grid;gap:12px"></div>
 </section>
+  
+  <!-- IMPULSAR -->
+<section id="impulsar">
+<h3>🚀 Impulsar mi emprendimiento</h3>
+<div id="seccionImpulsar">
+<label>Tipo</label>
+<select id="impTipo">
+<option value="producto">Producto</option>
+<option value="servicio">Servicio</option>
+</select>
+<div id="boxServicio" style="display:none">
+<label>Tipo de servicio</label>
+<input id="impServicio" placeholder="Ej: Electricista">
+<label>Zona de trabajo</label>
+<div style="display:flex;gap:8px">
+<input id="impZona" placeholder="Ej: Bahía Blanca" style="flex:1">
+<button type="button" class="btn btn-sec" onclick="usarUbicacion()">📍 Usar ubicación</button>
+</div>
+<input id="impLatLng" readonly placeholder="Lat,Lng" style="font-size:12px">
+</div>
+<label>Tu nombre</label>
+<input id="impNom">
+<label>Ciudad</label>
+<input id="impCiu">
+<label>Producto a impulsar</label>
+<input id="impProd">
+<label>WhatsApp</label>
+<input id="impWpp">
+<label>Link</label>
+<input id="impLink">
+<label style="display:flex;gap:8px;align-items:center">
+<input type="checkbox" id="impAcept" style="width:auto">
+Acepto pagar 15% solo si vendo
+</label>
+<button class="btn btn-acc" onclick="enviarImpulsar()">Enviar solicitud</button>
+<div id="impOut"></div>
+</div>
+</section>
 
 <!-- APIS 10 COMPLETAS -->
 <section id="apis">
