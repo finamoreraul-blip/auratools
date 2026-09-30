@@ -620,6 +620,55 @@ function trackVisita(){let v=JSON.parse(localStorage.getItem('emp_visitas')||'[]
 window.addEventListener('load',trackVisita);
 // SESION ACTIVA
 (function(){let s=localStorage.getItem('sess');if(s){let u=getUsers()[s];if(u)applyUser(u);}})();
+function clickImpulsar(){
+show('impulsar');
+const b=document.getElementById('bannerImpulsar');
+b.style.display='flex';
+setTimeout(()=>{
+b.style.display='none';
+document.getElementById('modalImpulsar').style.display='flex';
+},2000);
+}
+function cerrarModal(){
+document.getElementById('modalImpulsar').style.display='none';
+}
+function irAFormulario(){
+cerrarModal();
+document.getElementById('seccionImpulsar').scrollIntoView({behavior:'smooth'});
+}
+document.getElementById('impTipo').addEventListener('change',e=>{
+document.getElementById('boxServicio').style.display=e.target.value==='servicio'?'block':'none';
+});
+function usarUbicacion(){
+if(!navigator.geolocation){alert('No soportado');return;}
+navigator.geolocation.getCurrentPosition(p=>{
+const lat=p.coords.latitude.toFixed(6);
+const lng=p.coords.longitude.toFixed(6);
+document.getElementById('impLatLng').value=lat+','+lng;
+document.getElementById('impZona').value=lat+','+lng;
+});
+}
+function valImp(id){return document.getElementById(id).value.trim();}
+function enviarImpulsar(){
+if(!document.getElementById('impAcept').checked){
+document.getElementById('impOut').innerHTML='Tenés que aceptar el 15%';
+return;
+}
+const d={
+tipo:valImp('impTipo'),
+nom:valImp('impNom'),
+ciu:valImp('impCiu'),
+prod:valImp('impProd'),
+servicio:valImp('impServicio'),
+zona:valImp('impZona'),
+latlng:valImp('impLatLng'),
+wpp:valImp('impWpp'),
+link:valImp('impLink'),
+fecha:new Date().toLocaleString()
+};
+persist('impulsar',JSON.stringify(d));
+document.getElementById('impOut').innerHTML='✅ ¡Listo! Te contactamos en 24hs.';
+                                         }
 </script>
 </body>
 </html>
