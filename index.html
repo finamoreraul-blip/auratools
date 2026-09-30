@@ -412,7 +412,47 @@ document.getElementById('fixedPanelBtn').style.display='block';
 renderPersist();syncToPanel();
 }
 function logout(){localStorage.removeItem('sess');sessionStorage.removeItem('w_login');location.reload();}
-function openFullPanel(){if(!localStorage.getItem('sess')){alert('Iniciá sesión primero');return;}renderPersist();document.getElementById('panelPage').classList.add('active');document.body.style.overflow='hidden';}
+/* ======== IMPULSAR ======== */
+function clickImpulsar(){
+  const logged = localStorage.getItem(EMPS_KEY);
+  if(!logged){
+    document.getElementById('bannerImpulsar').style.display='flex';
+    setTimeout(()=>{ document.getElementById('bannerImpulsar').style.display='none'; show('panel'); }, 2500);
+    return;
+  }
+  document.getElementById('modalImpulsar').style.display='flex';
+}
+function closeImpulsar(){ document.getElementById('modalImpulsar').style.display='none'; }
+function submitImpulsar(){
+  const emp = JSON.parse(localStorage.getItem(EMPS_KEY)||'null');
+  if(!emp) return;
+  const motivo = document.getElementById('impMotivo').value.trim();
+  if(!motivo){ alert('Contanos brevemente por qué querés impulsar'); return; }
+  const all = JSON.parse(localStorage.getItem('impulsar_solicitudes')||'[]');
+  all.push({email: emp.email, nombre: emp.name, motivo, fecha: new Date().toISOString(), estado: 'pendiente'});
+  localStorage.setItem('impulsar_solicitudes', JSON.stringify(all));
+  closeImpulsar();
+  alert('¡Solicitud enviada! Te avisaremos por email cuando tu emprendimiento sea impulsado.');
+  renderImpulsarAdmin();
+}
+function renderImpulsarAdmin(){
+  const all = JSON.parse(localStorage.getItem('impulsar_solicitudes')||'[]');
+  const el = document.getElementById('pImpulsarFull');
+  if(!el) return;
+  if(!all.length){ el.innerHTML='<p class="muted">Sin solicitudes por ahora.</p>'; return; }
+  el.innerHTML = all.map((s,i)=>`
+    <div style="border:1px solid #e5e7eb;border-radius:10px;padding:10px;margin-bottom:8px">
+      <b>${s.nombre}</b> <span class="muted">${s.email}</span><br>
+      <small>${s.motivo}</small><br>
+      <small class="muted">${s.fecha} - ${s.estado}</small><br>
+      <button class="btn btn-sm" onclick="aprobarImpulsar(${i})">Aprobar</button>
+    </div>`).join('');
+}
+function aprobarImpulsar(i){
+  const all = JSON.parse(localStorage.getItem('impulsar_solicitudes')||'[]');
+  if(all[i]){ all[i].estado='aprobado'; localStorage.setItem('impulsar_solicitudes', JSON.stringify(all)); renderImpulsarAdmin(); }
+}
+  function openFullPanel(){if(!localStorage.getItem('sess')){alert('Iniciá sesión primero');return;}renderPersist();document.getElementById('panelPage').classList.add('active');document.body.style.overflow='hidden';}
 function closeFullPanel(){document.getElementById('panelPage').classList.remove('active');document.body.style.overflow='';}
 // CALCULADORA
 function calcMargen(){
