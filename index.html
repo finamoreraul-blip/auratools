@@ -352,6 +352,11 @@ Acepto pagar 15% solo si vendo
 <button id="fixedPanelBtn" onclick="openFullPanel()">👤 Mi Panel</button>
 
 <script>
+  const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbw3wMObY1MO5g3oMqoxHUj1UUw1celYPgP9cEQHt0-I57RBaikBLa-O_X5tgGvYkJr1CQ/exec";
+function sendToSheet(payload){
+  fetch(GOOGLE_SHEET_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body: JSON.stringify(payload)})
+ .then(()=>console.log("✅ Sheet OK",payload.tipo));
+  }
 // BANNER 5 DIAS - CUENTA REAL
 (function(){let k='oferta_inicio';let i=localStorage.getItem(k);if(!i){i=Date.now();localStorage.setItem(k,i);}let dias=Math.floor((Date.now()-parseInt(i))/(1000*60*60*24));let rest=5-dias;if(rest<0)rest=0;let el=document.getElementById('diasRestantes');if(el)el.textContent=rest;if(rest===0){let b=document.getElementById('bannerOferta');if(b)b.innerHTML='⏰ Tu prueba gratis terminó - $4.500/mes para seguir';}})();
 // NAVEGACION
