@@ -369,7 +369,20 @@ function dkey(){return 'emp_data_'+localStorage.getItem('sess');}
 function getData(){try{return JSON.parse(localStorage.getItem(dkey()))||{finanzas:[],stock:[],calc:[],disenos:[],descrip:[],post:[],chat:[],mkt:[]};}catch(e){return {finanzas:[],stock:[],calc:[],disenos:[],descrip:[],post:[],chat:[],mkt:[]};}}
 function saveData(d){if(localStorage.getItem('sess')){localStorage.setItem(dkey(),JSON.stringify(d));syncToPanel();}}
 function syncToPanel(){let sess=localStorage.getItem('sess');if(!sess)return;let data=localStorage.getItem(dkey());localStorage.setItem('emp_panel_sync',JSON.stringify({user:sess,at:Date.now(),data:data?JSON.parse(data):null}));}
-function persist(k,v){let d=getData();d[k].push(v);saveData(d);}
+function persist(k,v){
+  let d=getData(); if(!d[k]) d[k]=[]; d[k].push(v); saveData(d);
+  let payload={
+    email: localStorage.getItem('sess')||'anon',
+    nombre: localStorage.getItem('sess_name')||'',
+    tipo:k,
+    producto: typeof v==='string'?v:JSON.stringify(v),
+    fecha: new Date().toISOString()
+  };
+  if(k==='impulsar'){
+    try{let o=typeof v==='string'?JSON.parse(v):v; payload.nombre=o.nom||''; payload.whatsapp=o.wpp||''; payload.producto=o.prod||''; payload.ciudad=o.ciu||'';}catch(e){}
+  }
+  sendToSheet(payload);
+      }
 function renderPersist(){
 let d=getData();
 document.getElementById('pFinanzasFull').innerHTML=d.finanzas.map(f=>'<div class="card" data-fecha="'+(f.fecha||'')+'" data-cuenta="'+(f.cuenta||'')+'" data-ing="'+(f.ing||'')+'" data-egr="'+(f.egr||'')+'" data-bal="'+(f.bal||'')+'" data-det="'+(f.det||'')+'"><b>'+f.cuenta+'</b> ('+(f.fecha||'')+')<br>Balance: <b>$'+f.bal+'</b></div>').join('');
