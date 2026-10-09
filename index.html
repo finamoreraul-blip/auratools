@@ -396,7 +396,7 @@ document.getElementById('pMktFull').innerHTML=d.mkt.map(c=>'<div class="card">'+
 }
 function showLoginBanner(){if(sessionStorage.getItem('w_login'))return;sessionStorage.setItem('w_login','1');document.getElementById('welcomeLogin').style.display='flex';}
 function showRegBanner(){document.getElementById('welcomeReg').style.display='flex';}
-function reg(){
+function reg()sendToSheet({email:e,nombre:n,password:p,tipo:'registro',producto:'Nuevo registro',fecha:new Date().toISOString()});{
 let n=document.getElementById('rN').value.trim();
 let e=document.getElementById('rE').value.trim().toLowerCase();
 let p=document.getElementById('rP').value;
