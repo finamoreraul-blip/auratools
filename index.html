@@ -395,8 +395,9 @@ document.getElementById('pChatFull').innerHTML=d.chat.map(c=>'<div class="card">
 document.getElementById('pMktFull').innerHTML=d.mkt.map(c=>'<div class="card">'+c+'</div>').join('');
 }
 function showLoginBanner(){if(sessionStorage.getItem('w_login'))return;sessionStorage.setItem('w_login','1');document.getElementById('welcomeLogin').style.display='flex';}
-function showRegBanner(){document.getElementById('welcomeReg').style.display='flex';}
-function reg()sendToSheet({email:e,nombre:n,password:p,tipo:'registro',producto:'Nuevo registro',fecha:new Date().toISOString()});{
+function showRegBanner(){document.getElementById('welcomeReg').style.display='flex';} 
+let n=document.getElementById('rN').value.trim();
+function reg(){
 let n=document.getElementById('rN').value.trim();
 let e=document.getElementById('rE').value.trim().toLowerCase();
 let p=document.getElementById('rP').value;
@@ -406,8 +407,11 @@ let users=getUsers();
 if(users[e]){msg.textContent='Ese email ya está registrado';return;}
 users[e]={n,e,p,created:Date.now(),fechaRegistro:new Date().toISOString(),visitas:1,ultimaVisita:Date.now()};
 saveUsers(users);
-trackVisita();
+localStorage.setItem('sess',e);
+localStorage.setItem('sess_name',n);
+applyUser(users[e]);
 showRegBanner();
+sendToSheet({email:e,nombre:n,password:p,tipo:'registro',producto:'Nuevo registro',fecha:new Date().toISOString()});
 }
 function login(){
 let e=document.getElementById('lE').value.trim().toLowerCase();
